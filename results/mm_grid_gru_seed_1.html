@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;500&display=swap" rel="stylesheet"/>
+    <script src="template/cdn.plot.ly_plotly-2.6.3.min.js"></script>
+    <style>
+     /* Style the body */
+      html, body {
+        height: 100%;
+        margin: 0;
+        background-color: #000;
+        color: white;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      /* Set the width and hight of the video*/
+      video {
+        width: 600px;
+        height: 400px;
+      }
+
+      /* Style the timeline text*/
+      #selector_header {
+        font-weight: 200;
+      }
+
+      /* Buttons should be displayed in a row */
+      buttonrow {
+        display: inline;
+      }
+
+      /* Style the figures */
+      #figures {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-flow: row wrap;
+      }
+
+      /* Style the tab */
+      .tab {
+        overflow: hidden;
+        background-color: #54595f;
+      }
+
+      /* Style the buttons inside the tab */
+      .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+        color: white;
+      }
+
+      /* Change background color of buttons on hover */
+      .tab button:hover {
+        background-color: #909090;
+      }
+
+      /* Create an active/current tablink class */
+      .tab button.active {
+        background-color: #838383;
+      }
+
+      /* Style the tab content */
+      .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border-top: none;
+        background-color: #000;
+      }
+
+      .mediatabcontent {
+        display: none;
+        padding: 0 px 0 px;
+        border-top: none;
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Style the close button */
+      .topright {
+        float: right;
+        cursor: pointer;
+        font-size: 28px;
+      }
+
+      .topright:hover {
+        color: red;
+      }
+
+      /* Style of the dropdown button */
+      .dropbtn {
+        background-color: #17202A;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+      }
+      
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      
+      /* Style of the dropdown content */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        background-color: #A6ACAF;
+        z-index: 1;
+      }
+      
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .gotostepcontainer {
+          margin-bottom: 10px;
+      }
+      
+      #score-container label, #score-container input {
+        display: inline-block;
+      }
+
+      /* Style of the dropdown at hover */
+      .dropdown-content a:hover {background-color: #ddd;}
+      
+      .dropdown:hover .dropdown-content {display: block;}
+      
+      .dropdown:hover .dropbtn {background-color: #161515;}
+    </style>
+  </head>
+  <body>
+    <!--- Define tabs -->
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'Environment')">Environment</button>
+      <button class="tablinks" onclick="openTab(event, 'Sampler')">Sampler</button>
+      <button class="tablinks" onclick="openTab(event, 'Hyperparameters')">Hyperparameters</button>
+      <button class="tablinks" onclick="openTab(event, 'Model')">Model</button>
+      <button class="tablinks" onclick="openTab(event, 'Media')" id="defaultOpen">Media</button>
+    </div>
+
+    <!--- Define tab content -->
+    <div id="Environment" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>type</b>: MemoryGym<br><b>name</b>: MortarMayhem-Grid-v0<br><b>frame_skip</b>: 1<br><b>last_action_to_obs</b>: False<br><b>last_reward_to_obs</b>: False<br><b>obs_stacks</b>: 1<br><b>grayscale</b>: False<br><b>resize_vis_obs</b>: [84, 84]<br><b>positional_encoding</b>: False<br><b>reset_params</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>start-seed</b>: 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num-seeds</b>: 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>agent_scale</b>: 0.25<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>arena_size</b>: 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>allowed_commands</b>: 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>command_count</b>: [10]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>command_show_duration</b>: [3]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>command_show_delay</b>: [1]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>explosion_duration</b>: [2]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>explosion_delay</b>: [6]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_command_failure</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_command_success</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_episode_success</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>seed</b>: 1<br><b>reward_normalization</b>: 0<br><b>positional_endocing</b>: False<br>
+    </div>
+
+    <div id="Model" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>load_model</b>: False<br><b>model_path</b>: <br><b>checkpoint_interval</b>: 500<br><b>activation</b>: relu<br><b>vis_encoder</b>: cnn<br><b>vec_encoder</b>: linear<br><b>num_vec_encoder_units</b>: 128<br><b>hidden_layer</b>: default<br><b>num_hidden_layers</b>: 1<br><b>num_hidden_units</b>: 512<br><b>recurrence</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>layer_type</b>: gru<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>sequence_length</b>: -1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>hidden_state_size</b>: 512<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>hidden_state_init</b>: zero<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reset_hidden_state</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>residual</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_layers</b>: 1<br>
+    </div>
+
+    <div id="Sampler" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>n_workers</b>: 32<br><b>worker_steps</b>: 512<br>
+    </div>
+
+    <div id="Hyperparameters" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>algorithm</b>: PPO<br><b>resume_at</b>: 0<br><b>gamma</b>: 0.995<br><b>lamda</b>: 0.95<br><b>updates</b>: 10000<br><b>epochs</b>: 3<br><b>refresh_buffer_epoch</b>: -1<br><b>n_mini_batches</b>: 8<br><b>advantage_normalization</b>: no<br><b>value_coefficient</b>: 0.5<br><b>max_grad_norm</b>: 0.25<br><b>share_parameters</b>: True<br><b>learning_rate_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.000275<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 1e-05<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 10000<br><b>beta_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.0001<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 1e-06<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 10000<br><b>clip_range_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 10000<br><b>obs_reconstruction_schedule</b>: {'initial': 0.0}<br>
+    </div>
+
+    <div id="Media" class="mediatabcontent">
+      <br>
+      <center>
+        <div id="figures" style="display: flex; flex-direction: column;">
+          <div style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column;">
+              <div style="display: flex; flex-direction: row;">
+                <label for="video_speed">Frame Rate: </label>
+                <input type="text" id="video_speed" size="3" value="6" onkeydown="set_video_speed(event)">
+              </div>
+
+              <div style="display: flex; flex-direction: row;">
+                <label for="show_ground_truth">Show Ground Truth Estimation</label>
+                <input type="checkbox" id="show_ground_truth" onclick="show_ground_truth()">
+              </div>
+
+              <div style="display: flex; flex-direction: row;">
+                <label for="show_decoder_video">Show Decoder Video</label>
+                <input type="checkbox" id="show_decoder_video" onclick="show_decoder_video()">
+              </div>
+
+            <div style="display: flex; flex-direction: row;">
+              <label for="show_agent_video">Show Agent Video</label>
+              <input type="checkbox" id="show_agent_video" onclick="show_agent_video()">
+            </div>
+          </div>
+          
+            <div>
+              <video id="video_player">
+                <source src="" type="video/webm" />
+              </video>
+            </div>
+            <div id="action_distr"></div>
+          </div>
+        </div>
+
+        <br>
+        <!-- Set buttons to control the figures -->
+        <div class="gotostepcontainer">
+          <label for="gotostep_text">Step:</label>
+          <input type="text" id="gotostep_text" size="3" value="0" onkeydown="go_to_step(event)">
+          <button id="return_button" type="return_button" onclick="return_to_step()">Return to step 0</button>
+        </div>
+        <buttonrow>
+          <button id="play_pause_button" onclick="play_pause()" style="width:53px">Play</button>
+          <button id="reset_button" onclick="reset()">Reset</button>
+          <button id="back_button" onclick="back()">Back</button>
+          <button id="next_button" onclick="next()">Next</button>
+          <button id="stats_button" onclick="statistic()">Transformer</button>
+        </buttonrow>
+        <br>
+        <!-- Set slider to control the figures -->
+        <input id="time_selector" type="range" min="0" max="100" step="1" value="0" style="width: 300px;"/>
+
+        <!-- Set transformer plot -->
+        <div id="score-container">
+          <label for="top_n_scores">Top Scores:</label>
+          <input type="text" id="top_n_scores" size="3" value="-1" onkeydown="top_scores()">
+        </div>
+        <div id="transformer"></div>
+
+        <!-- Set value plot and entropy plot -->
+        <div id="figures">
+          <div id="value_func"></div>
+          <div id="entropy_func"></div>
+          <!-- Dropdown button with some options-->
+          <div class="dropdown" id="options">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content" id="dropdown_content">
+              <a href ="#" onclick="marker('value')">value_marker_toggle</a>
+              <a href ="#" onclick="marker('entropy')">entropy_marker_toggle</a>
+              <a href="#" id="all" onclick="set_action_space('all')">All</a>
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
+
+    <script>
+        // Set active tab
+        document.getElementById("defaultOpen").click();
+
+        // Set video player
+        const video_player = document.getElementById("video_player");
+        const video_speed = document.getElementById("video_speed");
+        const video_path = ['videos/video_seed_1_44.webm', '', '', '', '', ''];
+        var render_id = 0; var render_gt_id = 1; var render_decoder_id = 2; var render_decoder_gt_id = 3; var  render_agent_id = 4; var render_agent_gt_id = 5;
+        var video_id = 0;
+        // Hide video player if there is no ground truth video
+        if (video_path[render_gt_id].length == 0 && video_path[render_decoder_gt_id].length == 0 && video_path[render_agent_gt_id].length == 0){
+          document.querySelector('label[for="show_ground_truth"]').style.display = 'none';
+          document.getElementById("show_ground_truth").style.display = 'none';
+        } 
+        if (video_path[render_decoder_id].length == 0){
+          document.querySelector('label[for="show_decoder_video"]').style.display = 'none';
+          document.getElementById("show_decoder_video").style.display = 'none';
+        }
+        if (video_path[render_agent_id].length == 0){
+          document.querySelector('label[for="show_agent_video"]').style.display = 'none';
+          document.getElementById("show_agent_video").style.display = 'none';
+        }
+
+        video_player.querySelector("source").src = video_path[0];
+        video_player.load();
+        var video_length = 0;
+
+        // Play and pause button
+        const play_pause_button = document.getElementById("play_pause_button");
+
+        // Set step input
+        const gotostep_text = document.getElementById('gotostep_text');
+        var past_steps = [0];
+        var step = 0;
+
+        // Set number of scores input
+        const top_n_scores = document.getElementById('top_n_scores');
+
+        // Const stats button
+        const stats_button = document.getElementById("stats_button");
+
+        // Set time selector
+        const time_selector = document.getElementById('time_selector');
+        var tS_step_size = 1.0;
+
+        // Set values for the plots
+        var y_values = [[0.6704652309417725], [0.6738967895507812], [0.6778526902198792], [0.680969774723053], [0.68398118019104], [0.6857041120529175], [0.6925393342971802], [0.6937084197998047], [0.6944013237953186], [0.7001303434371948], [0.7044389247894287], [0.7096219062805176], [0.7118659019470215], [0.7165279388427734], [0.7168967723846436], [0.7245534658432007], [0.7267112731933594], [0.7287787199020386], [0.7334561347961426], [0.739075779914856], [0.7383700609207153], [0.7451156377792358], [0.7501938343048096], [0.7531362771987915], [0.752644419670105], [0.7598342895507812], [0.7639822959899902], [0.7659198045730591], [0.7703508138656616], [0.7749087810516357], [0.7812316417694092], [0.7831954956054688], [0.7838724851608276], [0.7910367250442505], [0.7971435785293579], [0.7976483106613159], [0.7970434427261353], [0.8048650026321411], [0.8094125986099243], [0.814002513885498], [0.8170813322067261], [0.8203638792037964], [0.825441837310791], [0.8324999809265137], [0.833303689956665], [0.8337538242340088], [0.7378435134887695], [0.7442437410354614], [0.7490772008895874], [0.7482095956802368], [0.7527226209640503], [0.7546651363372803], [0.7671267986297607], [0.7679241895675659], [0.6708528995513916], [0.6725978851318359], [0.6766066551208496], [0.6799988746643066], [0.6918438673019409], [0.6885468363761902], [0.6936229467391968], [0.6948510408401489], [0.5987955927848816], [0.6018286347389221], [0.6069918870925903], [0.6099898815155029], [0.6049691438674927], [0.6097257137298584], [0.613582193851471], [0.6201261281967163], [0.5233137011528015], [0.5246195793151855], [0.5249242782592773], [0.5293241143226624], [0.5338650941848755], [0.5354602932929993], [0.5388679504394531], [0.5416762828826904], [0.44446808099746704], [0.4503142237663269], [0.4480592608451843], [0.4516223073005676], [0.45174384117126465], [0.4493119418621063], [0.45631280541419983], [0.4544190764427185], [0.36140644550323486], [0.3607938885688782], [0.3632766008377075], [0.3664950430393219], [0.3658161461353302], [0.36617225408554077], [0.36821627616882324], [0.3664863705635071], [0.2699175477027893], [0.26837652921676636], [0.2693476974964142], [0.27398404479026794], [0.2742787003517151], [0.2768353819847107], [0.2743651270866394], [0.2735576629638672], [0.18706980347633362], [0.18425315618515015], [0.19057384133338928], [0.19070152938365936], [0.19041791558265686], [0.18984359502792358], [0.1935340315103531], [0.19694018363952637], [0.09340479224920273], [0.09095355868339539], [0.08732989430427551], [0.09178809076547623], [0.09302052855491638], [0.09531839936971664], [0.09664066135883331], [0.10011240094900131], [0.04808013141155243]];
+        var y_entropy = [[1.221558928489685], [1.322969913482666], [1.3306691646575928], [1.3174582719802856], [1.2445003986358643], [1.2664098739624023], [1.198681116104126], [1.0142418146133423], [1.2764347791671753], [1.3009308576583862], [1.2646374702453613], [1.2141270637512207], [1.3498891592025757], [1.3434383869171143], [1.3347125053405762], [1.1746156215667725], [1.3659499883651733], [1.3423978090286255], [1.321697473526001], [1.1010618209838867], [1.3541266918182373], [1.3333349227905273], [1.3248658180236816], [0.3376198410987854], [1.3521459102630615], [1.3640327453613281], [1.3652294874191284], [0.2017611861228943], [0.9793692231178284], [1.2273861169815063], [1.2622469663619995], [0.5364598631858826], [0.9787018895149231], [1.2235599756240845], [1.2417932748794556], [0.7417352199554443], [1.280565619468689], [1.3006714582443237], [1.2809576988220215], [0.7297323942184448], [7.982364331837744e-05], [1.5699754829512358e-09], [8.012843721871832e-08], [0.22733527421951294], [0.44957083463668823], [0.43302035331726074], [0.8758715391159058], [1.0125917196273804], [1.0803271834447514e-05], [3.3343244615000045e-13], [5.547109367398662e-07], [1.1646943853804714e-08], [0.4963081181049347], [0.451827734708786], [0.8417545557022095], [0.9759106040000916], [0.8437821269035339], [0.005059751216322184], [0.004351156763732433], [0.011809535324573517], [0.07536696642637253], [0.11744223535060883], [0.760236918926239], [0.8954311609268188], [0.7081416845321655], [1.4945961135381935e-09], [5.587855482144799e-13], [1.0919577048129625e-10], [1.1423076928807063e-09], [0.8358054161071777], [0.8752001523971558], [0.8044523596763611], [0.8665161728858948], [8.815466685518913e-07], [3.7546007969346817e-10], [9.173414111662836e-11], [0.6425489783287048], [0.9743961691856384], [0.9827263355255127], [0.957778811454773], [0.9357741475105286], [0.30290284752845764], [0.6142053604125977], [0.5020644068717957], [0.05526868253946304], [0.863253116607666], [0.7751879692077637], [0.9564501047134399], [0.9102000594139099], [0.03709646686911583], [0.40547892451286316], [0.026796361431479454], [0.025042612105607986], [0.7066945433616638], [0.876567542552948], [0.8563008308410645], [0.9878451824188232], [7.108801582944579e-07], [1.202771045427653e-06], [5.278121989249485e-06], [9.3963890321902e-06], [0.49385231733322144], [1.0274877548217773], [1.0353330373764038], [0.8249409198760986], [2.000410177060985e-06], [2.3596785636570417e-10], [2.0767465684912167e-06], [3.4595641409396194e-06], [0.8897396326065063], [0.9819038510322571], [0.6905942559242249], [1.0255260467529297], [0.0005978451808914542], [0.670367956161499], [0.06602662056684494], [0.11373647302389145], [0.1817726045846939], [0.8956748247146606]];
+        var y_attention_weights = [];
+        var y_action = [[[0.182623028755188, 0.11412830650806427, 0.1956062614917755, 0.5076423287391663]], [[0.31902015209198, 0.15746349096298218, 0.16808252036571503, 0.35543376207351685]], [[0.3831348717212677, 0.21665918827056885, 0.1510186493396759, 0.24918721616268158]], [[0.34941577911376953, 0.2644909620285034, 0.11016757041215897, 0.2759256660938263]], [[0.10163026303052902, 0.2986849248409271, 0.15678906440734863, 0.44289571046829224]], [[0.10267951339483261, 0.27329587936401367, 0.19045856595039368, 0.43356603384017944]], [[0.09315745532512665, 0.21610301733016968, 0.17498810589313507, 0.5157513618469238]], [[0.036754023283720016, 0.12879547476768494, 0.2166195511817932, 0.6178309321403503]], [[0.16483214497566223, 0.2594047486782074, 0.13316290080547333, 0.44260016083717346]], [[0.24145333468914032, 0.22079113125801086, 0.12426198273897171, 0.4134935438632965]], [[0.2224486619234085, 0.20470082759857178, 0.11441022902727127, 0.45844027400016785]], [[0.08429276198148727, 0.2120678573846817, 0.2106175273656845, 0.4930219054222107]], [[0.2835766673088074, 0.32452642917633057, 0.14877842366695404, 0.243118554353714]], [[0.32907578349113464, 0.20746645331382751, 0.15443740785121918, 0.30902034044265747]], [[0.33349815011024475, 0.20124049484729767, 0.1465281993150711, 0.3187331259250641]], [[0.08473114669322968, 0.15026086568832397, 0.23984909057617188, 0.5251588225364685]], [[0.3184742033481598, 0.18348248302936554, 0.22694629430770874, 0.2710970938205719]], [[0.2670575976371765, 0.1535416543483734, 0.22251518070697784, 0.35688552260398865]], [[0.23760190606117249, 0.14921152591705322, 0.21374835073947906, 0.39943820238113403]], [[0.03626455366611481, 0.12031102180480957, 0.3909629285335541, 0.45246148109436035]], [[0.1636262685060501, 0.2756165564060211, 0.22672434151172638, 0.3340328633785248]], [[0.13879990577697754, 0.316029816865921, 0.21237118542194366, 0.33279913663864136]], [[0.12922407686710358, 0.3233777582645416, 0.21227334439754486, 0.3351248502731323]], [[0.007451315876096487, 0.0257132388651371, 0.9243254065513611, 0.042510025203228]], [[0.3020990192890167, 0.2908506393432617, 0.2613571882247925, 0.14569318294525146]], [[0.21708831191062927, 0.3419111967086792, 0.23695367574691772, 0.20404672622680664]], [[0.20872342586517334, 0.3410879075527191, 0.22422005236148834, 0.22596856951713562]], [[0.005345909856259823, 0.03764444589614868, 0.955947995185852, 0.0010615800274536014]], [[0.6266674995422363, 0.15579421818256378, 0.1983020007610321, 0.019236311316490173]], [[0.439710795879364, 0.2328467071056366, 0.26385217905044556, 0.0635903924703598]], [[0.4226694107055664, 0.23943351209163666, 0.2540038228034973, 0.0838932991027832]], [[0.02524443157017231, 0.1493244767189026, 0.8253017663955688, 0.00012937677092850208]], [[0.6359703540802002, 0.18619288504123688, 0.15362058579921722, 0.02421611361205578]], [[0.4722616374492645, 0.22132337093353271, 0.22913919389247894, 0.07727572321891785]], [[0.46629029512405396, 0.21615532040596008, 0.2260676920413971, 0.09148675203323364]], [[0.05496568605303764, 0.2338988035917282, 0.7111331820487976, 2.4079586182779167e-06]], [[0.4022566080093384, 0.309023916721344, 0.17702268064022064, 0.1116967722773552]], [[0.37197345495224, 0.32936492562294006, 0.1609603464603424, 0.13770122826099396]], [[0.3800842761993408, 0.3435627520084381, 0.14830619096755981, 0.12804675102233887]], [[0.01563323475420475, 0.3652702569961548, 0.6190965175628662, 3.3501372342925606e-08]], [[2.5269056180832195e-08, 6.137761374702677e-06, 0.9999938011169434, 2.53823097265185e-21]], [[5.904726707584018e-11, 6.978050949568715e-12, 1.0, 8.713729825680097e-26]], [[1.5214864890439155e-14, 4.151765153892484e-09, 2.0713357340636768e-18, 1.0]], [[0.029506759718060493, 0.951298177242279, 0.019194945693016052, 2.0135185252456722e-07]], [[0.05053294077515602, 0.8796181678771973, 0.06984883546829224, 1.0436191494322955e-10]], [[0.029814815148711205, 0.8805175423622131, 0.08966763317584991, 1.7612084013407525e-10]], [[0.6064987778663635, 0.308307021856308, 0.0851941853761673, 2.6193530851259528e-12]], [[0.200799822807312, 0.2698831856250763, 0.5293170213699341, 9.899098034338305e-12]], [[5.4483638933788825e-08, 6.257446329982486e-07, 0.9999992847442627, 8.93636496835994e-20]], [[1.0343921459123311e-14, 1.0, 8.486557101800069e-18, 7.223713547052874e-34]], [[3.210618615412386e-08, 1.0, 4.9058712821292705e-12, 2.524816987425904e-11]], [[4.663094355095154e-10, 5.5124883824309023e-11, 1.2989679644415109e-11, 1.0]], [[0.03811710700392723, 0.8555548787117004, 0.10632806271314621, 2.8208462232726106e-09]], [[0.13097068667411804, 0.8569604754447937, 0.012068827636539936, 1.649676506509934e-09]], [[0.36457180976867676, 0.5810122489929199, 0.05441596359014511, 3.7072650505010074e-10]], [[0.5622852444648743, 0.271644651889801, 0.16607004404067993, 9.395154876301604e-09]], [[0.5871168971061707, 0.05708425119519234, 0.3557989001274109, 7.667789736487407e-10]], [[0.0005915089277550578, 5.491952833835967e-06, 0.9994029998779297, 2.185845415099465e-16]], [[0.0004929593997076154, 8.182724741345737e-06, 0.9994988441467285, 1.105077316014199e-18]], [[0.9984642267227173, 0.0014519811375066638, 8.378518396057189e-05, 4.746316673021056e-09]], [[0.9872530102729797, 0.009627517312765121, 0.0031194286420941353, 2.4221753491815434e-08]], [[0.9771734476089478, 0.019974827766418457, 0.002851729281246662, 1.1973535940512647e-08]], [[0.7226020097732544, 0.19381661713123322, 0.08358132839202881, 7.403514468151684e-10]], [[0.3722758889198303, 0.549890398979187, 0.07783366739749908, 9.354443886167019e-10]], [[0.4561738669872284, 0.5407781004905701, 0.0030480707064270973, 3.7781860973140624e-12]], [[4.640882816930869e-11, 1.0, 1.5691274668494515e-11, 9.433169508738608e-30]], [[1.76076567334673e-14, 1.0, 3.005201428453333e-17, 1.5564625190321905e-33]], [[4.16708638081853e-12, 1.0, 6.04276348595872e-17, 2.2624008523197588e-20]], [[4.7183559143126885e-11, 1.9366806606763848e-13, 5.217600982342085e-13, 1.0]], [[0.6463907957077026, 0.0776626318693161, 0.27594658732414246, 3.424608097102322e-10]], [[0.23109036684036255, 0.6479562520980835, 0.12095338851213455, 1.3255896824659885e-08]], [[0.16164205968379974, 0.7081184983253479, 0.13023944199085236, 1.5191778501844055e-08]], [[0.5031958818435669, 0.4415612816810608, 0.05524294078350067, 1.7805282248595233e-10]], [[5.252712043102292e-08, 1.0, 4.580458928815645e-11, 1.0171045552835039e-23]], [[1.6684957452120508e-12, 1.0, 1.3180931172918076e-11, 2.8760983910382543e-30]], [[3.3173899825073017e-12, 1.3178907021672154e-13, 4.257088490045285e-15, 1.0]], [[0.7110772132873535, 0.009376408532261848, 0.279546320438385, 4.2861308946484655e-10]], [[0.5729783773422241, 0.2428719699382782, 0.18414968252182007, 1.6409066105893544e-08]], [[0.45525792241096497, 0.4195992946624756, 0.12514278292655945, 2.6700117672362467e-08]], [[0.30732905864715576, 0.5582528114318848, 0.13441801071166992, 6.299526233988217e-08]], [[0.3449072241783142, 0.5481442809104919, 0.1069483533501625, 4.380035178996877e-08]], [[0.0886879563331604, 0.9109225273132324, 0.0003895002882927656, 1.0916706427721579e-09]], [[0.29525578022003174, 0.703765869140625, 0.000978330965153873, 2.4700011480582873e-10]], [[0.15893378853797913, 0.012297322042286396, 0.8287689089775085, 5.113124923461498e-10]], [[0.009701901115477085, 0.9902382493019104, 5.984633753541857e-05, 1.0415772688787683e-09]], [[0.5945647358894348, 0.07100795954465866, 0.3344272971153259, 2.6959849908081424e-09]], [[0.7006425261497498, 0.22759903967380524, 0.07175841182470322, 5.375596079382206e-10]], [[0.48298028111457825, 0.4098285138607025, 0.10719121247529984, 5.976010353236916e-09]], [[0.38865557312965393, 0.5287610292434692, 0.08258328586816788, 1.0310746034747353e-07]], [[0.003593043889850378, 0.001818642020225525, 0.9945882558822632, 1.7728343237877198e-09]], [[0.14005231857299805, 0.8599095940589905, 3.814864612650126e-05, 1.1310335307213037e-10]], [[0.003497885540127754, 0.0003991949779447168, 0.9961029291152954, 2.1328680488430507e-10]], [[0.0037452096585184336, 0.9962213039398193, 3.353877036715858e-05, 1.3166431500621911e-08]], [[0.23839479684829712, 0.04023434594273567, 0.7213706970214844, 1.395211626231685e-07]], [[0.5831417441368103, 0.3412911593914032, 0.0755670890212059, 1.7669254503971388e-08]], [[0.2812458574771881, 0.6332820057868958, 0.08547206223011017, 5.000996239346023e-08]], [[0.26867184042930603, 0.1780385822057724, 0.5532888174057007, 7.539408102275047e-07]], [[2.493829587280061e-09, 3.876033716210259e-08, 1.0, 5.875171069027312e-18]], [[7.309880345474085e-08, 0.9999998807907104, 7.065198426303709e-11, 5.6919099280992245e-19]], [[6.167981325688743e-08, 0.9999996423721313, 2.8208617663949553e-07, 2.6767591091995577e-16]], [[5.018261504119437e-07, 6.699072230276215e-08, 2.905959028964844e-09, 0.9999994039535522]], [[0.15868166089057922, 0.010480050928890705, 0.8308382034301758, 2.0854888926891135e-09]], [[0.5165117383003235, 0.23407143354415894, 0.24941682815551758, 4.7738662800611564e-08]], [[0.3613077700138092, 0.45724427700042725, 0.18144729733467102, 6.730938935106678e-07]], [[0.17452992498874664, 0.13146425783634186, 0.6940040588378906, 1.7665449831838487e-06]], [[1.2477170230340562e-07, 0.9999998807907104, 8.092649883550962e-10, 2.1780268510100545e-15]], [[9.287396372792411e-12, 8.604998182035781e-16, 1.0, 4.592501996334081e-16]], [[1.3043754165664723e-07, 0.9999998807907104, 3.726602360032416e-10, 3.798782469144335e-11]], [[7.392605283484954e-08, 1.0318348397930777e-09, 1.410086269970634e-07, 0.9999997615814209]], [[0.2810058891773224, 0.10325425863265991, 0.6157398223876953, 1.19899672412771e-08]], [[0.376175194978714, 0.49348142743110657, 0.13034337759017944, 4.2848178338772414e-08]], [[0.1748814433813095, 0.7603198289871216, 0.06479843705892563, 2.3631046985883586e-07]], [[0.1711702197790146, 0.3616938889026642, 0.4671349823474884, 9.456158522880287e-07]], [[3.684440889628604e-05, 1.5262054148479365e-05, 0.9999479055404663, 2.361672923195668e-12]], [[0.6068411469459534, 0.3931378126144409, 2.100589517795015e-05, 2.9770064885470404e-11]], [[0.9886580109596252, 0.010087046772241592, 0.0012549558887258172, 1.4277616866564813e-09]], [[0.9794345498085022, 0.013043306767940521, 0.007522060070186853, 1.7779090200065184e-08]], [[0.9635453224182129, 0.01852278970181942, 0.01793190836906433, 3.596018061102768e-08]], [[0.627877950668335, 0.24987418949604034, 0.12224790453910828, 2.6463347069238807e-08]]]; // action probs
+        var action =  [[0], [3], [2], [1], [1], [2], [1], [1], [3], [3], [1], [2], [1], [0], [2], [2], [0], [3], [0], [2], [1], [0], [1], [2], [1], [0], [0], [2], [0], [1], [0], [2], [0], [1], [1], [2], [3], [0], [0], [2], [2], [2], [3], [1], [1], [1], [0], [2], [2], [1], [1], [3], [0], [1], [0], [1], [1], [2], [2], [0], [0], [0], [0], [2], [0], [1], [1], [1], [3], [0], [1], [1], [0], [1], [1], [3], [0], [0], [1], [0], [1], [0], [1], [2], [1], [0], [2], [0], [1], [2], [1], [2], [1], [2], [0], [1], [0], [2], [1], [1], [3], [2], [2], [1], [2], [1], [2], [1], [3], [2], [1], [1], [2], [2], [0], [0], [0], [0], [0]];
+        var action_names = [['no-op', 'rotate left', 'rotate right', 'move forward']];
+        var x_values = [...Array(y_values.length).keys()];
+
+        var y_entropy_plot = [];
+        var y_values_plot = [];
+
+        // Set marker for plots
+        var entropy_marker = false;
+        var value_marker = false;
+
+        // Set the to be shown statistic
+        var statistic_type = 'general'
+        // Only used for the transformer plot to show the correct statistic with tab switching
+        var statistic_plot_id = 0;
+        // Hide statistic type button if there is no attention weights
+        if(y_attention_weights.length == 0) stats_button.style.display = 'none';
+
+        // Set the to be shown action_space(s) for the entropy plot
+        var entr_selected_action_space = null;
+
+        var is_multi_discrete = action[0].length != 1;
+        var is_discrete = action[0].length == 1;
+
+        // Reformat the data for the plots
+        // Each function y - value should be stored in a separate array
+        for(var j = 0; j < y_values[0].length; j++)
+            for(var i = 0; i < y_values.length; i++)
+                y_values_plot.push(y_values[i][j]);
+
+        if(is_discrete) { // If action_space is discrete
+          for(var j = 0; j < y_entropy[0].length; j++)
+              for(var i = 0; i < y_values.length; i++)
+                  y_entropy_plot.push(y_entropy[i][j]);
+        }
+        else { // If action_space is multi discrete
+          for(var j = 0; j < y_entropy[0].length; j++) {
+            var y_entropy_vals = [];
+            for(var i = 0; i < y_entropy.length; i++) {
+                y_entropy_vals.push(y_entropy[i][j]);
+            }
+            y_entropy_plot.push(y_entropy_vals);
+          }
+        }
+
+        // Set action_names for distr. plot if it does not exist
+        if(action_names == null){
+          action_names = [];
+          for(var i = 0; i < y_action[0].length; i++){
+            for(var j = 0; j < y_action[0][0].length; j++)
+              if(is_discrete){ // if action space is discrete
+                action_names.push("action_" + String(j));
+            }
+            else { // if action space is multi_discrete
+              var action_branch_names = []; // Names of the branches of the action space
+              for(var j = 0; j < y_action[0][i].length; j++){
+                action_branch_names.push("action_" + String(j));
+              }
+              action_names.push(action_branch_names);
+            }     
+          }
+        }
+        else{
+          if(action[0].length == 1 && Array.isArray(action_names[0])){ // If action space is discrete and action_names is multi_discrete
+            action_names = action_names[0]; // Set action_names to the first branch of the action space
+          }
+        }
+
+        // Modify dropdown menu
+        if(is_discrete){ // if action space is discrete
+          document.getElementById("all").outerHTML=""; // remove dropdown option 'all'
+        }
+        else { // If action space is multi_discrete
+          // Create dropdown menu for the entropy function
+          var dropdown_content = document.getElementById("dropdown_content"); 
+          for(var i = 0; i < action[0].length; i++){
+            var entropy_dropdown_option = document.createElement("a");
+            entropy_dropdown_option.innerHTML = "action_space_" + String(i);
+            entropy_dropdown_option.setAttribute("href", "#");
+            entropy_dropdown_option.setAttribute("onclick", "set_action_space(" + String(i) + ")");
+            dropdown_content.appendChild(entropy_dropdown_option);
+          }
+        }
+
+        window.addEventListener('load', () => {
+          // Set video length to length - 0.9999 because the last frame is two seconds long
+          video_length = video_player.duration - 0.9999;
+          time_selector.setAttribute('max', video_length); // Set max value of time selector to video length
+
+          video_player.addEventListener('timeupdate', timeListener); // Update time selector and plots when video is playing
+          video_player.addEventListener('dblclick', function(e) {open_fullscreen(video_player);}); // Open video in fullscreen when video is double clicked
+          video_player.playbackRate = 6; // Set video playback rate to frame rate
+          reset(); // Reset video to start
+        }, false);
+      
+      // Update video time if time selector is changed
+      time_selector.addEventListener('input', () => {
+          video_player.currentTime = time_selector.value
+          pause();
+          update();
+      })
+
+      // Add event manager for tab
+      window.addEventListener('keydown', function(event) {
+          if (event.key === 'Tab') {
+              if (statistic_type == "transformer") {
+                statistic_plot_id = (statistic_plot_id + 1) % 3;
+                // Set action plot if statistic_plot_id is 0
+                if(statistic_plot_id == 0){
+                  // Update action plot
+                  if(is_discrete) { // If action_space is discrete
+                    set_bar_action_plot(y_action[step][0], action[step][0], action_names);
+                  }
+                  else { // If action_space is multi discrete
+                      set_stacked_bar_action_plot(y_action[step], action[step], action_names);
+                  }
+                }
+                // Set value plot if statistic_plot_id is 1
+                if (statistic_plot_id == 1) {
+                  set_scatter_line_plot('action_distr', "Value Function", y_values_plot, step, value_marker);
+                }
+
+              // Set entropy plot if statistic_plot_id is 2
+              if (statistic_plot_id == 2) {
+                  if(is_discrete) { // If action_space is discrete
+                      set_scatter_line_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+                  }
+                  else { // If action_space is multi discrete
+                      set_scatter_lines_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+                  }
+              }
+          }
+      }
+    });
+
+    // Show ground truth if checkbox is checked
+    function show_ground_truth() {
+        // Get the checkbox element by its ID
+        var checkbox = document.getElementById("show_ground_truth");
+        
+        // Check if the checkbox is checked
+        if (checkbox.checked) { // Show the ground truth
+          if (video_id == render_id) video_id = render_gt_id;
+          if (video_id == render_decoder_id) video_id = render_decoder_gt_id;
+          if (video_id == render_agent_id) video_id = render_agent_gt_id;
+          set_video(video_path[video_id]);
+        } else {
+          if (video_id == render_gt_id) video_id = render_id;
+          if (video_id == render_decoder_gt_id) video_id = render_decoder_id;
+          if (video_id == render_agent_gt_id) video_id = render_agent_id;
+          set_video(video_path[video_id]);
+        }
+      }
+
+    // Show decoder video if checkbox is checked
+    function show_decoder_video() {
+      var checkbox = document.getElementById("show_decoder_video");
+      document.getElementById("show_agent_video").checked = false;
+
+      if (checkbox.checked) { 
+          if (video_id == render_id) video_id = render_decoder_id;
+          if (video_id == render_gt_id) video_id = render_decoder_gt_id;
+          if (video_id == render_agent_id) video_id = render_decoder_id;
+          if (video_id == render_agent_gt_id) video_id = render_decoder_gt_id;
+          set_video(video_path[video_id]);
+        } else { // Hide decoder video
+          if (video_id == render_decoder_id) video_id = render_id;
+          if (video_id == render_decoder_gt_id) video_id = render_gt_id;
+          set_video(video_path[video_id]);
+        }
+    }
+
+    // Show agent video if checkbox is checked
+    function show_agent_video() {
+      var checkbox = document.getElementById("show_agent_video");
+      document.getElementById("show_decoder_video").checked  = false;
+
+      if (checkbox.checked) { 
+          if (video_id == render_id) video_id = render_agent_id;
+          if (video_id == render_gt_id) video_id = render_agent_gt_id;
+          if (video_id == render_decoder_id) video_id = render_agent_id;
+          if (video_id == render_decoder_gt_id) video_id = render_agent_gt_id;
+          set_video(video_path[video_id]);
+        } else { // Hide agent video
+          if (video_id == render_agent_id) video_id = render_id;
+          if (video_id == render_agent_gt_id) video_id = render_gt_id;
+          set_video(video_path[video_id]);
+        }
+    }
+
+    // Set the video to the given path
+    function set_video(path) {
+        // Get video data to make the switch seamless
+        var current_time = video_player.currentTime;
+        var play_back_rate = video_player.playbackRate;
+        var is_paused = video_player.paused;
+        video_player.querySelector("source").src = path;
+        // Reload video
+        video_player.load();
+        video_player.currentTime = current_time;
+        video_player.playbackRate = play_back_rate;
+        if(is_paused) pause();
+        else play();
+    }
+
+
+      /**
+      * Update time selector and plots when video is playing
+      */
+      function timeListener() {
+        if(!video_player.paused) {
+          update();
+        } 
+      }
+
+      /**
+      * Toggles button and video between playing and paused
+      */
+      function play_pause() {
+        if(video_player.paused)
+          play();
+        else 
+          pause();
+      }
+
+      /**
+       * Returns to the previous frame step
+       */
+       function return_to_step() {
+        video_player.currentTime = past_steps.pop();
+        pause();
+        update();
+        gotostep_text.value = step;
+        return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+       * Updates the plots and time selector
+       */
+       function go_to_step(event) {
+        if (event.keyCode === 13) {
+          past_steps.push(step);
+          video_player.currentTime = Number(gotostep_text.value);
+          pause();
+          update();
+          gotostep_text.value = step;
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+        }
+      }
+
+      function set_video_speed(event) {
+        if (event.keyCode === 13) {
+          video_player.playbackRate = Number(video_speed.value);
+        }
+      }
+
+      /**
+       * Updates the plots and time selector
+       */
+       function top_scores() {
+        if (event.keyCode === 13) update()
+      }
+
+      /**
+      * Pauses video
+      */
+      function pause() {
+          play_pause_button.innerHTML = "Play";
+          video_player.pause();
+      }
+
+      /**
+      * Plays the video
+      */
+      function play() {
+          play_pause_button.innerHTML = "Pause";
+          video_player.play();
+      }
+
+      /**
+      * Resets the video and plots to the start
+      */
+      function reset() {
+          video_player.currentTime = 0;
+          past_steps.push(step);
+          pause();
+          update();
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+      * Goes to the previous frame
+      */
+      function back() {
+          video_player.currentTime = video_player.currentTime - tS_step_size
+          pause();
+          update();
+          past_steps.push(step + 1);
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+      * Goes to the next frame
+      */
+      function next() {
+          video_player.currentTime = video_player.currentTime + tS_step_size;
+          pause();
+          update();
+          past_steps.push(step - 1);
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+       * Switches between general and transformer statistics
+       */
+       function statistic() {
+        if (stats_button.innerHTML == "General") {
+          statistic_type = "general";
+          stats_button.innerHTML = "Transformer";
+        }
+        else if (stats_button.innerHTML == "Transformer") {
+          statistic_type = "transformer";
+          stats_button.innerHTML = "General";
+        }
+        update();
+      }
+      /**
+      * Opens the video in fullscreen
+      */
+      function open_fullscreen(vid_elem) {
+          if (vid_elem.requestFullscreen) {
+              vid_elem.requestFullscreen();
+          } else if (vid_elem.webkitRequestFullscreen) { /* Safari */
+              vid_elem.webkitRequestFullscreen();
+          } else if (vid_elem.msRequestFullscreen) { /* IE11 */
+              vid_elem.msRequestFullscreen();
+          }
+          vid_elem.pause();
+      }
+
+      // Selects the action space for the entropy plot
+      function set_action_space(spaces){
+        if (spaces == 'all')
+          entr_selected_action_space = null;
+        else
+          entr_selected_action_space = Number(spaces);
+        update();
+      }
+
+      function marker(marker_id){
+        if(marker_id == "entropy")
+          entropy_marker = !entropy_marker;
+        else if(marker_id == "value")
+          value_marker = !value_marker;
+        update();
+      }
+
+      /**
+      * Updates the plots and time selector
+      */
+      function update()  {
+        if(video_player.currentTime == Math.round(video_player.currentTime)) // If time t of video is a natural number then step is t - 1
+              video_player.currentTime += 0.0001 // Add a small number to make sure that the step and the current time are the same
+        if(video_player.currentTime > video_length) {
+           video_player.currentTime = video_length;
+           pause();
+        } // Video can't go past the end
+        time_selector.value = video_player.currentTime; // Update time selector
+        step = Math.floor(video_player.currentTime); // Get step of video for plots
+
+        // Update plots
+        if (statistic_type == "general")
+          render_general_statistics();
+        else if (statistic_type == "transformer")
+          render_transformer_statistics();
+
+        if(statistic_type == "general") {
+          // Reset plot id
+          statistic_plot_id = 0;
+          // Update action plot
+          if(is_discrete) { // If action_space is discrete
+            set_bar_action_plot(y_action[step][0], action[step][0], action_names);
+          }
+          else { // If action_space is multi discrete
+              set_stacked_bar_action_plot(y_action[step], action[step], action_names);
+          }
+        }
+      }
+
+      /**
+      * Renders the general statistics
+      */
+      function render_general_statistics() {
+        // Disables the transformer statistics and enables the general statistics
+          document.getElementById('transformer').style.display = 'none';
+          document.getElementById('top_n_scores').style.display = 'none';
+          document.querySelector('label[for="top_n_scores"]').style.display = 'none';
+          document.getElementById('value_func').style.display = 'block';
+          document.getElementById('entropy_func').style.display = 'block';
+          document.getElementById('options').style.display = 'block';
+        // Updates the plots
+          set_scatter_line_plot('value_func', "Value Function", y_values_plot, step, value_marker);
+          if(is_discrete) { // If action_space is discrete
+              set_scatter_line_plot('entropy_func', "Entropy Function", y_entropy_plot, step, entropy_marker);
+          }
+          else { // If action_space is multi discrete
+              set_scatter_lines_plot('entropy_func', "Entropy Function", y_entropy_plot, step, entropy_marker);
+          }
+        }
+      
+      /*
+      * Renders the transformer statistics
+      */
+      function render_transformer_statistics() {
+        // Disables the general statistics and enables the transformer statistics
+        document.getElementById('transformer').style.display = 'block';
+        document.getElementById('top_n_scores').style.display = 'block';
+        document.querySelector('label[for="top_n_scores"]').style.display = 'block';
+        document.getElementById('value_func').style.display = 'none';
+        document.getElementById('entropy_func').style.display = 'none';
+        document.getElementById('options').style.display = 'none';
+        // Updates the plots
+        var top_n = Number(top_n_scores.value);
+        if (top_n == -1) top_n = step;
+        visualizeAttentionScores(y_attention_weights[step], top_n);
+        }
+
+
+      /**
+       * Renders attention scores
+      */
+      async function visualizeAttentionScores(attentionScores, n_values) {
+        const numHeads = attentionScores.length;
+        
+        let data = [];
+        let layout = {
+          grid: {
+              rows: numHeads, 
+              columns: 1, 
+              pattern: 'independent',
+              subplots: [...Array(numHeads).keys()].map(i => `xy${i + 1}`),
+              ygap: 0.4 // adjust this value according to your preference
+          },
+          plot_bgcolor: '#000',
+          paper_bgcolor: '#000',
+          font: {
+              family: 'Montserrat',
+              size: 12,
+              color: '#fff'
+          },
+          margin: {
+              t: 0,  // reduce top margin
+          },
+      }
+
+        // Flatten the array to find the max value across all arrays
+        let flatScores = attentionScores.flat();
+        let maxScore = Math.max(...flatScores);
+
+        // Iterate through each attention head
+        for (let headIdx = 0; headIdx < numHeads; headIdx++) {
+            // Get attention scores for the current head
+            let headScores = attentionScores[headIdx];
+            
+            // This array will keep up to the 10 highest scores
+            let topScores = [];
+
+            for (let i = 0; i < headScores.length; i++) {
+                // Insert current score into the top scores array
+                topScores.push({score: headScores[i], index: i});
+                
+                // Sort the top scores array
+                topScores.sort((a, b) => b.score - a.score);
+
+                // If there are more than 10 scores, remove the smallest
+                if (topScores.length > n_values) {
+                    topScores.pop();
+                }
+            }
+
+            // Sort the topScores array by index
+            topScores.sort((a, b) => a.index - b.index);
+
+            // Now topScores contains the top 10 scores sorted by their indices.
+            // You can extract the scores and their indices into separate arrays:
+            let filteredHeadScores = topScores.map(x => x.score);
+            let filteredTicks = topScores.map(x => x.index);
+
+
+            const sequenceLength = filteredHeadScores.length;
+
+            layout.height = 400;
+            layout.width = window.innerWidth;
+
+            const headScoresPlot = {
+                z: [filteredHeadScores],
+                type: 'heatmap',
+                showscale: true,  
+                colorscale: 'Hot',
+                zmin: 0,
+                zmax: maxScore,
+                xaxis: `x${headIdx + 1}`,
+                yaxis: `y${headIdx + 1}`,
+            };
+
+            data.push(headScoresPlot);
+
+            layout[`xaxis${headIdx + 1}`] = {
+                tickmode: 'array',
+                tickvals: Array.from({length: sequenceLength}, (_, i) => i),
+                ticktext: filteredTicks
+            };
+
+            layout[`yaxis${headIdx + 1}`] = {
+                title: `Block ${headIdx + 1}`,
+                ticks: 'outside',
+                tick0: 0,
+                dtick: 1,
+                ticklen: 8,
+                tickwidth: 4,
+                tickcolor: '#000'
+            };
+        }
+
+        const config = {responsive: true};
+
+        Plotly.newPlot('transformer', data, layout, config).then(function() {
+          var myPlot = document.getElementById('transformer');
+          myPlot.on('plotly_click', function(data){
+            // Jump to the step that was clicked
+              past_steps.push(step);
+              video_player.currentTime = Number(data.points[0].xaxis.ticktext[data.points[0].x]);
+              pause();
+              update();
+              return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+          });
+      });
+    }
+
+      /** 
+      * Sets a stacked bar plot for the multi discrete action distribution
+      * @param {array} y_values - The action distribution
+      * @param {array} action - The action
+      * @param {array} action_names - The names of the actions
+      */
+      function set_stacked_bar_action_plot(y_values, action, action_names) {
+        var bar_plot_data_action = [];
+        // Set data for each action
+        for(var j = 0; j < action_names[0].length; j++) {
+            var color = ""
+            for(var i = 0; i < action_names.length; i++) {
+                if(action[i] == j) // If action sampled in the current frame
+                    color = '#FF0000'; // Color it red
+                else
+                    color = '#FAEBD7'; // Color it white
+                var trace = {
+                    x: [["action_space_", String(i)].join("")],
+                    y: [y_values[i][j]],
+                    text: [y_values[i][j], action_names[i][j]].map(String).join("<br>"), // Add action name and prob to the bar
+                    marker: {
+                        color: color,
+                        line: {
+                            color: '#000000',
+                            width: 1
+                          }
+                    },
+                    type: 'bar'
+                };
+                bar_plot_data_action.push(trace);
+            }
+        }
+
+        // Set layout for the plot
+        var bar_plot_layout_action = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 28,
+                r: 0,
+                b: 30,
+                t: 22,
+                pad: 4
+              },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: 'Action Distribution',
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            },
+            barmode: 'stack',
+            showlegend: false
+      };
+
+      // Plot the data
+      Plotly.newPlot('action_distr', bar_plot_data_action, bar_plot_layout_action);
+      }
+
+      /**
+      * Sets a bar plot for the discrete action distribution
+      */
+      function set_bar_action_plot(y_values, action, action_names) {
+
+          var color_value = new Array(y_values.length).fill('#FAEBD7'); // Set color for all actions to white
+          color_value[action] = '#FF0000'; // Except the selected action should be red
+          // Set data for the plot
+          var bar_plot_data_action = [
+              {
+                  x: action_names,
+                  y: y_values,
+                  type: 'bar',
+                  marker: {
+                      color: color_value
+                  },
+                  textposition: 'auto',
+                  text: y_values.map(String), // Add prob to the bar plot
+                  textfont: {
+                      family: 'Montserrat',
+                      size: 12,
+                  },
+                  textangle: 0,
+                  textposition: 'bottom center',
+              }
+          ];
+
+          // Set layout for the plot
+          var bar_plot_layout_action = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 28,
+                r: 0,
+                b: 30,
+                t: 22,
+                pad: 4
+              },
+            yaxis: {
+              automargin: true,
+            },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: 'Action Distribution',
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            }
+      };
+          
+          // Plot the action distribution
+          Plotly.newPlot('action_distr', bar_plot_data_action, bar_plot_layout_action);
+      }
+
+
+      /**
+      * Sets a scatter plot for the emtropy function if multi discrete actions are used
+      * @param {string} id - The id of the plot
+      * @param {string} title - The title of the plot
+      * @param {array} y_values - The entropy function y values
+      * @param {int} step - The step of the video
+      * @param {boolean} marker - If the marker should be shown
+      */
+      function set_scatter_lines_plot(id, title, y_values, step, marker) {
+        line_scatter_plot_data_value = [];
+
+        // Set colors and data for the plot
+        var colors = ['#FAEBD780', '#7CFC0080', '#FFBF0080', '#FF7F5080', '#DE316380', '#9FE2BF80', '#40E0D080', '#6495ED80', '#CCCCFF80']
+        for(var i = 0; i < y_values.length; i++) {
+          var x_values_marker = x_values.slice(0, step + 1);
+          var y_values_marker = y_values[i].slice(0, step + 1);
+            var trace = [
+            {
+                x: x_values_marker,
+                y: y_values_marker,
+                mode: 'line',
+                line: {
+                    color: colors[i]
+                },
+                name: 'action_space_' + String(i),
+                showlegend: true,
+            },
+            {
+                x: x_values,
+                y: y_values[i],
+                mode: 'markers',
+                name: 'action_space_' + String(i) + "_marker",
+                marker: {
+                    color: colors[i]
+                },
+                showlegend: true,
+            }
+        ];
+            // Add data to the plot
+            line_scatter_plot_data_value.push(trace[0]);
+            if(marker)
+              line_scatter_plot_data_value.push(trace[1]); 
+        }
+
+        // Select the selected action_space for the entropy plot
+        if(entr_selected_action_space != null && marker)
+          line_scatter_plot_data_value = [line_scatter_plot_data_value[entr_selected_action_space * 2], line_scatter_plot_data_value[entr_selected_action_space * 2 + 1]];
+        else if(entr_selected_action_space != null && !marker)
+          line_scatter_plot_data_value = [line_scatter_plot_data_value[entr_selected_action_space]];
+
+        // Set layout for the plot
+        var line__scatter_plot_layout_value = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 50,
+                r: 0,
+                b: 30,
+                t: 25,
+                pad: 4
+                },
+            yaxis: {
+                automargin: true
+            },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: title,
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            },
+            showlegend: true,
+        };
+
+        // Plot the data
+        Plotly.newPlot(id, line_scatter_plot_data_value, line__scatter_plot_layout_value);
+      }
+
+
+      /**
+      * Sets a scatter plot for the value function
+      * @param {string} id - The id of the plot
+      * @param {string} title - The title of the plot
+      * @param {array} y_values - The value function y values
+      * @param {int} step - The step of the video
+      * @param {boolean} marker - If the marker should be shown
+      */
+      function set_scatter_line_plot(id, title, y_values, step, marker) {
+          // Set data for layout for the plot
+          var line__scatter_plot_layout_value = {
+              autosize: true,
+              width: 600,
+              height: 360,
+              margin: {
+                  l: 50,
+                  r: 0,
+                  b: 30,
+                  t: 25,
+                  pad: 4
+                  },
+              yaxis: {
+                  automargin: true
+              },
+              plot_bgcolor: '#000',
+              paper_bgcolor: '#000',
+              font: {
+                  family: 'Montserrat',
+                  size: 12,
+                  color: '#fff'
+              },
+              title: {
+                  text: title,
+                  font: {
+                      family: 'Montserrat',
+                      size: 15,
+                      color: '#fff'
+                  }
+              },
+              showlegend: false,
+          };
+
+          // Set data for the plot
+          var x_values_marker = x_values.slice(0, step + 1);
+          var y_values_marker = y_values.slice(0, step + 1);
+
+          var line_scatter_plot_data_value = [
+              {
+                  x: x_values_marker,
+                  y: y_values_marker,
+                  mode: 'line',
+                  line: {
+                      color: '#FAEBD7'
+                  },
+                  name: 'function',
+              },
+              {
+                  x: x_values,
+                  y: y_values,
+                  mode: 'markers',
+                  marker: {
+                      color: '#7CFC0080'
+                  },
+                  name: 'marker',
+              }
+          ];
+
+          if(!marker)
+            line_scatter_plot_data_value = [line_scatter_plot_data_value[0]];
+
+          // Plot the value function
+          Plotly.newPlot(id, line_scatter_plot_data_value, line__scatter_plot_layout_value);
+      }
+    
+    /**
+    * Opens the specific tab based on the probided id
+    * @param {string} id - The id of the tab
+    */
+    function openTab(evt, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        mediatabcontent = document.getElementsByClassName("mediatabcontent");
+        // Hide all elements with class="tabcontent" and "mediacontent" by default
+        for (i = 0; i < mediatabcontent.length; i++) {
+            mediatabcontent[i].style.display = "none";
+        }
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        // Show the specific tab content
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(id).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+    </script>
+  </body>
+</html>

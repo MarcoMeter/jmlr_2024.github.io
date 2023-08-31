@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;500&display=swap" rel="stylesheet"/>
+    <script src="template/cdn.plot.ly_plotly-2.6.3.min.js"></script>
+    <style>
+     /* Style the body */
+      html, body {
+        height: 100%;
+        margin: 0;
+        background-color: #000;
+        color: white;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      /* Set the width and hight of the video*/
+      video {
+        width: 600px;
+        height: 400px;
+      }
+
+      /* Style the timeline text*/
+      #selector_header {
+        font-weight: 200;
+      }
+
+      /* Buttons should be displayed in a row */
+      buttonrow {
+        display: inline;
+      }
+
+      /* Style the figures */
+      #figures {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-flow: row wrap;
+      }
+
+      /* Style the tab */
+      .tab {
+        overflow: hidden;
+        background-color: #54595f;
+      }
+
+      /* Style the buttons inside the tab */
+      .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+        color: white;
+      }
+
+      /* Change background color of buttons on hover */
+      .tab button:hover {
+        background-color: #909090;
+      }
+
+      /* Create an active/current tablink class */
+      .tab button.active {
+        background-color: #838383;
+      }
+
+      /* Style the tab content */
+      .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border-top: none;
+        background-color: #000;
+      }
+
+      .mediatabcontent {
+        display: none;
+        padding: 0 px 0 px;
+        border-top: none;
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Style the close button */
+      .topright {
+        float: right;
+        cursor: pointer;
+        font-size: 28px;
+      }
+
+      .topright:hover {
+        color: red;
+      }
+
+      /* Style of the dropdown button */
+      .dropbtn {
+        background-color: #17202A;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+      }
+      
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      
+      /* Style of the dropdown content */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        background-color: #A6ACAF;
+        z-index: 1;
+      }
+      
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .gotostepcontainer {
+          margin-bottom: 10px;
+      }
+      
+      #score-container label, #score-container input {
+        display: inline-block;
+      }
+
+      /* Style of the dropdown at hover */
+      .dropdown-content a:hover {background-color: #ddd;}
+      
+      .dropdown:hover .dropdown-content {display: block;}
+      
+      .dropdown:hover .dropbtn {background-color: #161515;}
+    </style>
+  </head>
+  <body>
+    <!--- Define tabs -->
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'Environment')">Environment</button>
+      <button class="tablinks" onclick="openTab(event, 'Sampler')">Sampler</button>
+      <button class="tablinks" onclick="openTab(event, 'Hyperparameters')">Hyperparameters</button>
+      <button class="tablinks" onclick="openTab(event, 'Model')">Model</button>
+      <button class="tablinks" onclick="openTab(event, 'Media')" id="defaultOpen">Media</button>
+    </div>
+
+    <!--- Define tab content -->
+    <div id="Environment" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>type</b>: MemoryGym<br><b>name</b>: SearingSpotlights-v0<br><b>frame_skip</b>: 1<br><b>last_action_to_obs</b>: False<br><b>last_reward_to_obs</b>: False<br><b>obs_stacks</b>: 1<br><b>grayscale</b>: False<br><b>resize_vis_obs</b>: [84, 84]<br><b>positional_encoding</b>: False<br><b>reset_params</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>start-seed</b>: 2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num-seeds</b>: 1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_steps</b>: 256<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial_spawns</b>: 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_spawns</b>: 30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial_spawn_interval</b>: 30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spawn_interval_threshold</b>: 10<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spawn_interval_decay</b>: 0.95<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spot_min_radius</b>: 7.5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spot_max_radius</b>: 13.75<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spot_min_speed</b>: 0.0025<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spot_max_speed</b>: 0.0075<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>spot_damage</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>visual_feedback</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>black_background</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>hide_chessboard</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>light_dim_off_duration</b>: 6<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>light_threshold</b>: 255<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_coins</b>: [1]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>coin_scale</b>: 0.375<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>coins_visible</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>use_exit</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>exit_visible</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>exit_scale</b>: 0.5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>agent_speed</b>: 3.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>agent_health</b>: 5<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>agent_scale</b>: 0.25<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>agent_visible</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>sample_agent_position</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>show_last_action</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>show_last_positive_reward</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_inside_spotlight</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_outside_spotlight</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_death</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_exit</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_max_steps</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reward_coin</b>: 0.25<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>seed</b>: 2<br><b>reward_normalization</b>: 0<br>
+    </div>
+
+    <div id="Model" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>load_model</b>: False<br><b>model_path</b>: <br><b>checkpoint_interval</b>: 500<br><b>activation</b>: relu<br><b>vis_encoder</b>: cnn<br><b>vec_encoder</b>: linear<br><b>num_vec_encoder_units</b>: 128<br><b>hidden_layer</b>: default<br><b>num_hidden_layers</b>: 1<br><b>num_hidden_units</b>: 512<br><b>recurrence</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>layer_type</b>: gru<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>sequence_length</b>: -1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>hidden_state_size</b>: 512<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>hidden_state_init</b>: zero<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>reset_hidden_state</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>residual</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_layers</b>: 1<br><b>obs_decoder</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>attach_to</b>: memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>detach_gradient</b>: False<br>
+    </div>
+
+    <div id="Sampler" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>n_workers</b>: 32<br><b>worker_steps</b>: 512<br>
+    </div>
+
+    <div id="Hyperparameters" class="tabcontent">
+      <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+      <b>algorithm</b>: PPO<br><b>resume_at</b>: 0<br><b>gamma</b>: 0.995<br><b>lamda</b>: 0.95<br><b>updates</b>: 20000<br><b>epochs</b>: 3<br><b>refresh_buffer_epoch</b>: -1<br><b>n_mini_batches</b>: 8<br><b>advantage_normalization</b>: no<br><b>value_coefficient</b>: 0.5<br><b>max_grad_norm</b>: 0.25<br><b>share_parameters</b>: True<br><b>learning_rate_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.000275<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 1e-05<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 20000<br><b>beta_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.0001<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 1e-06<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 20000<br><b>clip_range_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 10000<br><b>obs_reconstruction_schedule</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>initial</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>final</b>: 0.1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>power</b>: 1.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_decay_steps</b>: 1000<br><b>ground_truth_estimator_schedule</b>: {'initial': 0.0}<br>
+    </div>
+
+    <div id="Media" class="mediatabcontent">
+      <br>
+      <center>
+        <div id="figures" style="display: flex; flex-direction: column;">
+          <div style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column;">
+              <div style="display: flex; flex-direction: row;">
+                <label for="video_speed">Frame Rate: </label>
+                <input type="text" id="video_speed" size="3" value="6" onkeydown="set_video_speed(event)">
+              </div>
+
+              <div style="display: flex; flex-direction: row;">
+                <label for="show_ground_truth">Show Ground Truth Estimation</label>
+                <input type="checkbox" id="show_ground_truth" onclick="show_ground_truth()">
+              </div>
+
+              <div style="display: flex; flex-direction: row;">
+                <label for="show_decoder_video">Show Decoder Video</label>
+                <input type="checkbox" id="show_decoder_video" onclick="show_decoder_video()">
+              </div>
+
+            <div style="display: flex; flex-direction: row;">
+              <label for="show_agent_video">Show Agent Video</label>
+              <input type="checkbox" id="show_agent_video" onclick="show_agent_video()">
+            </div>
+          </div>
+          
+            <div>
+              <video id="video_player">
+                <source src="" type="video/webm" />
+              </video>
+            </div>
+            <div id="action_distr"></div>
+          </div>
+        </div>
+
+        <br>
+        <!-- Set buttons to control the figures -->
+        <div class="gotostepcontainer">
+          <label for="gotostep_text">Step:</label>
+          <input type="text" id="gotostep_text" size="3" value="0" onkeydown="go_to_step(event)">
+          <button id="return_button" type="return_button" onclick="return_to_step()">Return to step 0</button>
+        </div>
+        <buttonrow>
+          <button id="play_pause_button" onclick="play_pause()" style="width:53px">Play</button>
+          <button id="reset_button" onclick="reset()">Reset</button>
+          <button id="back_button" onclick="back()">Back</button>
+          <button id="next_button" onclick="next()">Next</button>
+          <button id="stats_button" onclick="statistic()">Transformer</button>
+        </buttonrow>
+        <br>
+        <!-- Set slider to control the figures -->
+        <input id="time_selector" type="range" min="0" max="100" step="1" value="0" style="width: 300px;"/>
+
+        <!-- Set transformer plot -->
+        <div id="score-container">
+          <label for="top_n_scores">Top Scores:</label>
+          <input type="text" id="top_n_scores" size="3" value="-1" onkeydown="top_scores()">
+        </div>
+        <div id="transformer"></div>
+
+        <!-- Set value plot and entropy plot -->
+        <div id="figures">
+          <div id="value_func"></div>
+          <div id="entropy_func"></div>
+          <!-- Dropdown button with some options-->
+          <div class="dropdown" id="options">
+            <button class="dropbtn">Options</button>
+            <div class="dropdown-content" id="dropdown_content">
+              <a href ="#" onclick="marker('value')">value_marker_toggle</a>
+              <a href ="#" onclick="marker('entropy')">entropy_marker_toggle</a>
+              <a href="#" id="all" onclick="set_action_space('all')">All</a>
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
+
+    <script>
+        // Set active tab
+        document.getElementById("defaultOpen").click();
+
+        // Set video player
+        const video_player = document.getElementById("video_player");
+        const video_speed = document.getElementById("video_speed");
+        const video_path = ['videos/video_seed_2_69.webm', '', '', '', '', ''];
+        var render_id = 0; var render_gt_id = 1; var render_decoder_id = 2; var render_decoder_gt_id = 3; var  render_agent_id = 4; var render_agent_gt_id = 5;
+        var video_id = 0;
+        // Hide video player if there is no ground truth video
+        if (video_path[render_gt_id].length == 0 && video_path[render_decoder_gt_id].length == 0 && video_path[render_agent_gt_id].length == 0){
+          document.querySelector('label[for="show_ground_truth"]').style.display = 'none';
+          document.getElementById("show_ground_truth").style.display = 'none';
+        } 
+        if (video_path[render_decoder_id].length == 0){
+          document.querySelector('label[for="show_decoder_video"]').style.display = 'none';
+          document.getElementById("show_decoder_video").style.display = 'none';
+        }
+        if (video_path[render_agent_id].length == 0){
+          document.querySelector('label[for="show_agent_video"]').style.display = 'none';
+          document.getElementById("show_agent_video").style.display = 'none';
+        }
+
+        video_player.querySelector("source").src = video_path[0];
+        video_player.load();
+        var video_length = 0;
+
+        // Play and pause button
+        const play_pause_button = document.getElementById("play_pause_button");
+
+        // Set step input
+        const gotostep_text = document.getElementById('gotostep_text');
+        var past_steps = [0];
+        var step = 0;
+
+        // Set number of scores input
+        const top_n_scores = document.getElementById('top_n_scores');
+
+        // Const stats button
+        const stats_button = document.getElementById("stats_button");
+
+        // Set time selector
+        const time_selector = document.getElementById('time_selector');
+        var tS_step_size = 1.0;
+
+        // Set values for the plots
+        var y_values = [[1.098850131034851], [1.0785716772079468], [1.0817950963974], [1.0831674337387085], [1.0883435010910034], [1.0969520807266235], [1.101983904838562], [1.1070971488952637], [1.1122972965240479], [1.1179436445236206], [1.123574137687683], [1.128486156463623], [1.1354514360427856], [1.138291835784912], [1.1437581777572632], [1.1498435735702515], [1.1554982662200928], [1.1621499061584473], [1.1689211130142212], [1.1754250526428223], [1.1814576387405396], [1.1866744756698608], [1.191673755645752], [1.1951382160186768], [1.200273871421814], [1.2125308513641357], [0.9644303321838379], [0.9744166135787964], [0.9754073619842529], [0.9814695119857788], [0.9865307807922363], [0.9895598888397217], [0.9927644729614258], [0.9954230785369873]];
+        var y_entropy = [[0.11938688158988953, 1.0440819096402265e-05], [1.23305130728113e-06, 0.020620761439204216], [1.8793080869272671e-07, 0.005397395230829716], [1.722882458921049e-08, 0.0009524201159365475], [6.524915718841839e-09, 0.001074153813533485], [5.536721747745332e-09, 0.004125447478145361], [3.0336128276076124e-08, 0.08544234186410904], [3.032920758982982e-08, 0.27191492915153503], [2.303504587075622e-08, 0.40898194909095764], [1.8463154560777184e-08, 0.4680900573730469], [1.829475770875888e-08, 0.41497400403022766], [1.3945865795506052e-08, 0.41775357723236084], [1.4090358035900863e-07, 0.02187279425561428], [3.747038590518059e-08, 0.06325170397758484], [2.7520457024365896e-08, 0.0566776879131794], [1.9177878840537232e-08, 0.05653674528002739], [1.528532678207739e-08, 0.04834011197090149], [9.969570946566364e-09, 0.04177280142903328], [6.317715683934466e-09, 0.040589313954114914], [4.927989571967828e-09, 0.03157954290509224], [5.811980230419067e-09, 0.01884319633245468], [6.799202090235212e-09, 0.011180160567164421], [8.421189079399483e-09, 0.00592949939891696], [1.4851751828359738e-08, 0.0026049588341265917], [1.1279642819772562e-07, 0.0008821958326734602], [0.002558773150667548, 0.008316311053931713], [0.02908254787325859, 0.0015902019804343581], [0.004805104341357946, 3.760389517992735e-05], [0.0010840401519089937, 0.014415460638701916], [0.0013046409003436565, 0.04895026981830597], [0.0009864678140729666, 0.16682356595993042], [0.001630614628084004, 0.36874300241470337], [0.003167332150042057, 0.6771143078804016], [0.011266898363828659, 0.44819068908691406]];
+        var y_attention_weights = [];
+        var y_action = [[[0.9743235111236572, 0.025675488635897636, 9.826928817346925e-07], [6.671577352790337e-07, 9.201581825050292e-14, 0.9999992847442627]], [[7.516990052636174e-08, 0.9999998807907104, 2.2740625571851525e-14], [0.003034072695299983, 5.012536913318044e-11, 0.9969659447669983]], [[1.0213736523212447e-08, 1.0, 9.442355344878653e-14], [0.0006468804785981774, 7.895694514870044e-12, 0.9993531107902527]], [[8.236618054269229e-10, 1.0, 2.277795050218876e-15], [9.259102080250159e-05, 3.4175494465632505e-13, 0.999907374382019]], [[2.9745431118222143e-10, 1.0, 8.438208394996344e-16], [0.0001057776971720159, 5.67348631182879e-13, 0.9998942613601685]], [[2.504376983569756e-10, 1.0, 2.760519762133812e-15], [0.00047711198567412794, 9.217650080717288e-12, 0.9995229244232178]], [[1.4924746993827398e-09, 1.0, 1.6369318281504036e-13], [0.016832733526825905, 4.9087773845712945e-09, 0.9831672310829163]], [[1.4890654265187209e-09, 1.0, 2.383068135186628e-12], [0.0772145688533783, 1.1672725719336086e-07, 0.9227853417396545]], [[1.1130293353645015e-09, 1.0, 3.3547086549651217e-12], [0.14222224056720734, 3.01834688798408e-07, 0.85777747631073]], [[8.809927232178438e-10, 1.0, 3.5850387328922872e-12], [0.17782805860042572, 3.79382441906273e-07, 0.8221715688705444]], [[8.737300327688047e-10, 1.0, 2.6359246816515247e-12], [0.14558207988739014, 3.427329033911519e-07, 0.8544175028800964]], [[6.570863853028186e-10, 1.0, 1.9644503038152017e-12], [0.14715856313705444, 3.16260354793485e-07, 0.8528410792350769]], [[7.532774404239717e-09, 1.0, 3.68197985121943e-13], [0.003251440357416868, 1.0787661430811113e-08, 0.9967485666275024]], [[1.86343651620291e-09, 1.0, 4.846494841732885e-13], [0.01160451304167509, 4.501514538901574e-08, 0.9883954524993896]], [[1.3468477444433802e-09, 1.0, 3.6381257706961934e-13], [0.010147267021238804, 3.28773879232358e-08, 0.9898527264595032]], [[9.214111695854399e-10, 1.0, 2.700286012586456e-13], [0.010116501711308956, 2.8978481836361425e-08, 0.9898834824562073]], [[7.261057866081444e-10, 1.0, 1.928986755484613e-13], [0.008363763801753521, 2.18221209991043e-08, 0.9916362762451172]], [[4.637230877069243e-10, 1.0, 1.1263468727585463e-13], [0.007012960035353899, 1.4841360140849247e-08, 0.9929869771003723]], [[2.874734617019925e-10, 1.0, 6.437677403962547e-14], [0.006774885579943657, 1.0500152747283664e-08, 0.9932250380516052]], [[2.2163101909278282e-10, 1.0, 3.6523562630232445e-14], [0.005018970463424921, 6.316803080608224e-09, 0.9949809908866882]], [[2.634620577257607e-10, 1.0, 2.45187950617589e-14], [0.002730095526203513, 2.8728377454712017e-09, 0.9972699284553528]], [[3.1054669946684044e-10, 1.0, 1.5746865955818846e-14], [0.001488885609433055, 1.1401084520912264e-09, 0.9985111355781555]], [[3.886267696540102e-10, 1.0, 8.262764048818337e-15], [0.0007199805113486946, 3.807521242737977e-10, 0.9992800354957581]], [[7.047639138946238e-10, 1.0, 4.548290370498314e-15], [0.00028421563911251724, 1.3696833944809583e-10, 0.9997157454490662]], [[5.955801629653479e-09, 1.0, 2.972255552574285e-15], [8.507518214173615e-05, 1.5603489333937404e-10, 0.9999148845672607]], [[0.0002785756660159677, 0.999721348285675, 3.3837774249256825e-10], [0.0010589248267933726, 2.4539232867937244e-07, 0.9989408850669861]], [[0.00452532060444355, 1.1238205843255855e-05, 0.9954634308815002], [2.8926274353580084e-06, 0.9998379945755005, 0.00015906486078165472]], [[0.0005670086247846484, 6.799026185805301e-12, 0.9994329810142517], [2.7103862976218807e-06, 0.9999972581863403, 3.5165178603226155e-13]], [[0.0001068737983587198, 3.2565297680697824e-11, 0.999893069267273], [0.0019980615470558405, 0.9980018734931946, 8.82860506923322e-10]], [[0.00013129519356880337, 1.5032851352625443e-10, 0.999868631362915], [0.008491748943924904, 0.9915082454681396, 1.0435881492298904e-08]], [[9.624732047086582e-05, 1.806388233438483e-10, 0.9999037981033325], [0.03964729607105255, 0.9603525996208191, 1.0953525020340749e-07]], [[0.0001682759029790759, 8.388900130107402e-10, 0.9998316764831543], [0.12090804427862167, 0.879091203212738, 8.584853503634804e-07]], [[0.0003540111647453159, 6.940289676293787e-09, 0.9996459484100342], [0.4103311002254486, 0.5896574854850769, 1.1432131941546686e-05]], [[0.0015017424011602998, 2.0408643308655883e-07, 0.9984980821609497], [0.8359358310699463, 0.1638185679912567, 0.00024555649724788964]]]; // action probs
+        var action =  [[0, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 0], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [1, 2], [2, 1], [2, 1], [2, 1], [2, 1], [2, 1], [2, 1], [2, 1], [2, 0]];
+        var action_names = [['no-op', 'left', 'right'], ['no-op', 'up', 'down']];
+        var x_values = [...Array(y_values.length).keys()];
+
+        var y_entropy_plot = [];
+        var y_values_plot = [];
+
+        // Set marker for plots
+        var entropy_marker = false;
+        var value_marker = false;
+
+        // Set the to be shown statistic
+        var statistic_type = 'general'
+        // Only used for the transformer plot to show the correct statistic with tab switching
+        var statistic_plot_id = 0;
+        // Hide statistic type button if there is no attention weights
+        if(y_attention_weights.length == 0) stats_button.style.display = 'none';
+
+        // Set the to be shown action_space(s) for the entropy plot
+        var entr_selected_action_space = null;
+
+        var is_multi_discrete = action[0].length != 1;
+        var is_discrete = action[0].length == 1;
+
+        // Reformat the data for the plots
+        // Each function y - value should be stored in a separate array
+        for(var j = 0; j < y_values[0].length; j++)
+            for(var i = 0; i < y_values.length; i++)
+                y_values_plot.push(y_values[i][j]);
+
+        if(is_discrete) { // If action_space is discrete
+          for(var j = 0; j < y_entropy[0].length; j++)
+              for(var i = 0; i < y_values.length; i++)
+                  y_entropy_plot.push(y_entropy[i][j]);
+        }
+        else { // If action_space is multi discrete
+          for(var j = 0; j < y_entropy[0].length; j++) {
+            var y_entropy_vals = [];
+            for(var i = 0; i < y_entropy.length; i++) {
+                y_entropy_vals.push(y_entropy[i][j]);
+            }
+            y_entropy_plot.push(y_entropy_vals);
+          }
+        }
+
+        // Set action_names for distr. plot if it does not exist
+        if(action_names == null){
+          action_names = [];
+          for(var i = 0; i < y_action[0].length; i++){
+            for(var j = 0; j < y_action[0][0].length; j++)
+              if(is_discrete){ // if action space is discrete
+                action_names.push("action_" + String(j));
+            }
+            else { // if action space is multi_discrete
+              var action_branch_names = []; // Names of the branches of the action space
+              for(var j = 0; j < y_action[0][i].length; j++){
+                action_branch_names.push("action_" + String(j));
+              }
+              action_names.push(action_branch_names);
+            }     
+          }
+        }
+        else{
+          if(action[0].length == 1 && Array.isArray(action_names[0])){ // If action space is discrete and action_names is multi_discrete
+            action_names = action_names[0]; // Set action_names to the first branch of the action space
+          }
+        }
+
+        // Modify dropdown menu
+        if(is_discrete){ // if action space is discrete
+          document.getElementById("all").outerHTML=""; // remove dropdown option 'all'
+        }
+        else { // If action space is multi_discrete
+          // Create dropdown menu for the entropy function
+          var dropdown_content = document.getElementById("dropdown_content"); 
+          for(var i = 0; i < action[0].length; i++){
+            var entropy_dropdown_option = document.createElement("a");
+            entropy_dropdown_option.innerHTML = "action_space_" + String(i);
+            entropy_dropdown_option.setAttribute("href", "#");
+            entropy_dropdown_option.setAttribute("onclick", "set_action_space(" + String(i) + ")");
+            dropdown_content.appendChild(entropy_dropdown_option);
+          }
+        }
+
+        window.addEventListener('load', () => {
+          // Set video length to length - 0.9999 because the last frame is two seconds long
+          video_length = video_player.duration - 0.9999;
+          time_selector.setAttribute('max', video_length); // Set max value of time selector to video length
+
+          video_player.addEventListener('timeupdate', timeListener); // Update time selector and plots when video is playing
+          video_player.addEventListener('dblclick', function(e) {open_fullscreen(video_player);}); // Open video in fullscreen when video is double clicked
+          video_player.playbackRate = 6; // Set video playback rate to frame rate
+          reset(); // Reset video to start
+        }, false);
+      
+      // Update video time if time selector is changed
+      time_selector.addEventListener('input', () => {
+          video_player.currentTime = time_selector.value
+          pause();
+          update();
+      })
+
+      // Add event manager for tab
+      window.addEventListener('keydown', function(event) {
+          if (event.key === 'Tab') {
+              if (statistic_type == "transformer") {
+                statistic_plot_id = (statistic_plot_id + 1) % 3;
+                // Set action plot if statistic_plot_id is 0
+                if(statistic_plot_id == 0){
+                  // Update action plot
+                  if(is_discrete) { // If action_space is discrete
+                    set_bar_action_plot(y_action[step][0], action[step][0], action_names);
+                  }
+                  else { // If action_space is multi discrete
+                      set_stacked_bar_action_plot(y_action[step], action[step], action_names);
+                  }
+                }
+                // Set value plot if statistic_plot_id is 1
+                if (statistic_plot_id == 1) {
+                  set_scatter_line_plot('action_distr', "Value Function", y_values_plot, step, value_marker);
+                }
+
+              // Set entropy plot if statistic_plot_id is 2
+              if (statistic_plot_id == 2) {
+                  if(is_discrete) { // If action_space is discrete
+                      set_scatter_line_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+                  }
+                  else { // If action_space is multi discrete
+                      set_scatter_lines_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+                  }
+              }
+          }
+      }
+    });
+
+    // Show ground truth if checkbox is checked
+    function show_ground_truth() {
+        // Get the checkbox element by its ID
+        var checkbox = document.getElementById("show_ground_truth");
+        
+        // Check if the checkbox is checked
+        if (checkbox.checked) { // Show the ground truth
+          if (video_id == render_id) video_id = render_gt_id;
+          if (video_id == render_decoder_id) video_id = render_decoder_gt_id;
+          if (video_id == render_agent_id) video_id = render_agent_gt_id;
+          set_video(video_path[video_id]);
+        } else {
+          if (video_id == render_gt_id) video_id = render_id;
+          if (video_id == render_decoder_gt_id) video_id = render_decoder_id;
+          if (video_id == render_agent_gt_id) video_id = render_agent_id;
+          set_video(video_path[video_id]);
+        }
+      }
+
+    // Show decoder video if checkbox is checked
+    function show_decoder_video() {
+      var checkbox = document.getElementById("show_decoder_video");
+      document.getElementById("show_agent_video").checked = false;
+
+      if (checkbox.checked) { 
+          if (video_id == render_id) video_id = render_decoder_id;
+          if (video_id == render_gt_id) video_id = render_decoder_gt_id;
+          if (video_id == render_agent_id) video_id = render_decoder_id;
+          if (video_id == render_agent_gt_id) video_id = render_decoder_gt_id;
+          set_video(video_path[video_id]);
+        } else { // Hide decoder video
+          if (video_id == render_decoder_id) video_id = render_id;
+          if (video_id == render_decoder_gt_id) video_id = render_gt_id;
+          set_video(video_path[video_id]);
+        }
+    }
+
+    // Show agent video if checkbox is checked
+    function show_agent_video() {
+      var checkbox = document.getElementById("show_agent_video");
+      document.getElementById("show_decoder_video").checked  = false;
+
+      if (checkbox.checked) { 
+          if (video_id == render_id) video_id = render_agent_id;
+          if (video_id == render_gt_id) video_id = render_agent_gt_id;
+          if (video_id == render_decoder_id) video_id = render_agent_id;
+          if (video_id == render_decoder_gt_id) video_id = render_agent_gt_id;
+          set_video(video_path[video_id]);
+        } else { // Hide agent video
+          if (video_id == render_agent_id) video_id = render_id;
+          if (video_id == render_agent_gt_id) video_id = render_gt_id;
+          set_video(video_path[video_id]);
+        }
+    }
+
+    // Set the video to the given path
+    function set_video(path) {
+        // Get video data to make the switch seamless
+        var current_time = video_player.currentTime;
+        var play_back_rate = video_player.playbackRate;
+        var is_paused = video_player.paused;
+        video_player.querySelector("source").src = path;
+        // Reload video
+        video_player.load();
+        video_player.currentTime = current_time;
+        video_player.playbackRate = play_back_rate;
+        if(is_paused) pause();
+        else play();
+    }
+
+
+      /**
+      * Update time selector and plots when video is playing
+      */
+      function timeListener() {
+        if(!video_player.paused) {
+          update();
+        } 
+      }
+
+      /**
+      * Toggles button and video between playing and paused
+      */
+      function play_pause() {
+        if(video_player.paused)
+          play();
+        else 
+          pause();
+      }
+
+      /**
+       * Returns to the previous frame step
+       */
+       function return_to_step() {
+        video_player.currentTime = past_steps.pop();
+        pause();
+        update();
+        gotostep_text.value = step;
+        return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+       * Updates the plots and time selector
+       */
+       function go_to_step(event) {
+        if (event.keyCode === 13) {
+          past_steps.push(step);
+          video_player.currentTime = Number(gotostep_text.value);
+          pause();
+          update();
+          gotostep_text.value = step;
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+        }
+      }
+
+      function set_video_speed(event) {
+        if (event.keyCode === 13) {
+          video_player.playbackRate = Number(video_speed.value);
+        }
+      }
+
+      /**
+       * Updates the plots and time selector
+       */
+       function top_scores() {
+        if (event.keyCode === 13) update()
+      }
+
+      /**
+      * Pauses video
+      */
+      function pause() {
+          play_pause_button.innerHTML = "Play";
+          video_player.pause();
+      }
+
+      /**
+      * Plays the video
+      */
+      function play() {
+          play_pause_button.innerHTML = "Pause";
+          video_player.play();
+      }
+
+      /**
+      * Resets the video and plots to the start
+      */
+      function reset() {
+          video_player.currentTime = 0;
+          past_steps.push(step);
+          pause();
+          update();
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+      * Goes to the previous frame
+      */
+      function back() {
+          video_player.currentTime = video_player.currentTime - tS_step_size
+          pause();
+          update();
+          past_steps.push(step + 1);
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+      * Goes to the next frame
+      */
+      function next() {
+          video_player.currentTime = video_player.currentTime + tS_step_size;
+          pause();
+          update();
+          past_steps.push(step - 1);
+          return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+      }
+
+      /**
+       * Switches between general and transformer statistics
+       */
+       function statistic() {
+        if (stats_button.innerHTML == "General") {
+          statistic_type = "general";
+          stats_button.innerHTML = "Transformer";
+        }
+        else if (stats_button.innerHTML == "Transformer") {
+          statistic_type = "transformer";
+          stats_button.innerHTML = "General";
+        }
+        update();
+      }
+      /**
+      * Opens the video in fullscreen
+      */
+      function open_fullscreen(vid_elem) {
+          if (vid_elem.requestFullscreen) {
+              vid_elem.requestFullscreen();
+          } else if (vid_elem.webkitRequestFullscreen) { /* Safari */
+              vid_elem.webkitRequestFullscreen();
+          } else if (vid_elem.msRequestFullscreen) { /* IE11 */
+              vid_elem.msRequestFullscreen();
+          }
+          vid_elem.pause();
+      }
+
+      // Selects the action space for the entropy plot
+      function set_action_space(spaces){
+        if (spaces == 'all')
+          entr_selected_action_space = null;
+        else
+          entr_selected_action_space = Number(spaces);
+        update();
+      }
+
+      function marker(marker_id){
+        if(marker_id == "entropy")
+          entropy_marker = !entropy_marker;
+        else if(marker_id == "value")
+          value_marker = !value_marker;
+        update();
+      }
+
+      /**
+      * Updates the plots and time selector
+      */
+      function update()  {
+        if(video_player.currentTime == Math.round(video_player.currentTime)) // If time t of video is a natural number then step is t - 1
+              video_player.currentTime += 0.0001 // Add a small number to make sure that the step and the current time are the same
+        if(video_player.currentTime > video_length) {
+           video_player.currentTime = video_length;
+           pause();
+        } // Video can't go past the end
+        time_selector.value = video_player.currentTime; // Update time selector
+        step = Math.floor(video_player.currentTime); // Get step of video for plots
+
+        // Update plots
+        if (statistic_type == "general")
+          render_general_statistics();
+        else if (statistic_type == "transformer")
+          render_transformer_statistics();
+
+        if(statistic_type == "general") {
+          // Reset plot id
+          statistic_plot_id = 0;
+          // Update action plot
+          if(is_discrete) { // If action_space is discrete
+            set_bar_action_plot(y_action[step][0], action[step][0], action_names);
+          }
+          else { // If action_space is multi discrete
+              set_stacked_bar_action_plot(y_action[step], action[step], action_names);
+          }
+        }
+      }
+
+      /**
+      * Renders the general statistics
+      */
+      function render_general_statistics() {
+        // Disables the transformer statistics and enables the general statistics
+          document.getElementById('transformer').style.display = 'none';
+          document.getElementById('top_n_scores').style.display = 'none';
+          document.querySelector('label[for="top_n_scores"]').style.display = 'none';
+          document.getElementById('value_func').style.display = 'block';
+          document.getElementById('entropy_func').style.display = 'block';
+          document.getElementById('options').style.display = 'block';
+        // Updates the plots
+          set_scatter_line_plot('value_func', "Value Function", y_values_plot, step, value_marker);
+          if(is_discrete) { // If action_space is discrete
+              set_scatter_line_plot('entropy_func', "Entropy Function", y_entropy_plot, step, entropy_marker);
+          }
+          else { // If action_space is multi discrete
+              set_scatter_lines_plot('entropy_func', "Entropy Function", y_entropy_plot, step, entropy_marker);
+          }
+        }
+      
+      /*
+      * Renders the transformer statistics
+      */
+      function render_transformer_statistics() {
+        // Disables the general statistics and enables the transformer statistics
+        document.getElementById('transformer').style.display = 'block';
+        document.getElementById('top_n_scores').style.display = 'block';
+        document.querySelector('label[for="top_n_scores"]').style.display = 'block';
+        document.getElementById('value_func').style.display = 'none';
+        document.getElementById('entropy_func').style.display = 'none';
+        document.getElementById('options').style.display = 'none';
+        // Updates the plots
+        var top_n = Number(top_n_scores.value);
+        if (top_n == -1) top_n = step;
+        visualizeAttentionScores(y_attention_weights[step], top_n);
+        }
+
+
+      /**
+       * Renders attention scores
+      */
+      async function visualizeAttentionScores(attentionScores, n_values) {
+        const numHeads = attentionScores.length;
+        
+        let data = [];
+        let layout = {
+          grid: {
+              rows: numHeads, 
+              columns: 1, 
+              pattern: 'independent',
+              subplots: [...Array(numHeads).keys()].map(i => `xy${i + 1}`),
+              ygap: 0.4 // adjust this value according to your preference
+          },
+          plot_bgcolor: '#000',
+          paper_bgcolor: '#000',
+          font: {
+              family: 'Montserrat',
+              size: 12,
+              color: '#fff'
+          },
+          margin: {
+              t: 0,  // reduce top margin
+          },
+      }
+
+        // Flatten the array to find the max value across all arrays
+        let flatScores = attentionScores.flat();
+        let maxScore = Math.max(...flatScores);
+
+        // Iterate through each attention head
+        for (let headIdx = 0; headIdx < numHeads; headIdx++) {
+            // Get attention scores for the current head
+            let headScores = attentionScores[headIdx];
+            
+            // This array will keep up to the 10 highest scores
+            let topScores = [];
+
+            for (let i = 0; i < headScores.length; i++) {
+                // Insert current score into the top scores array
+                topScores.push({score: headScores[i], index: i});
+                
+                // Sort the top scores array
+                topScores.sort((a, b) => b.score - a.score);
+
+                // If there are more than 10 scores, remove the smallest
+                if (topScores.length > n_values) {
+                    topScores.pop();
+                }
+            }
+
+            // Sort the topScores array by index
+            topScores.sort((a, b) => a.index - b.index);
+
+            // Now topScores contains the top 10 scores sorted by their indices.
+            // You can extract the scores and their indices into separate arrays:
+            let filteredHeadScores = topScores.map(x => x.score);
+            let filteredTicks = topScores.map(x => x.index);
+
+
+            const sequenceLength = filteredHeadScores.length;
+
+            layout.height = 400;
+            layout.width = window.innerWidth;
+
+            const headScoresPlot = {
+                z: [filteredHeadScores],
+                type: 'heatmap',
+                showscale: true,  
+                colorscale: 'Hot',
+                zmin: 0,
+                zmax: maxScore,
+                xaxis: `x${headIdx + 1}`,
+                yaxis: `y${headIdx + 1}`,
+            };
+
+            data.push(headScoresPlot);
+
+            layout[`xaxis${headIdx + 1}`] = {
+                tickmode: 'array',
+                tickvals: Array.from({length: sequenceLength}, (_, i) => i),
+                ticktext: filteredTicks
+            };
+
+            layout[`yaxis${headIdx + 1}`] = {
+                title: `Block ${headIdx + 1}`,
+                ticks: 'outside',
+                tick0: 0,
+                dtick: 1,
+                ticklen: 8,
+                tickwidth: 4,
+                tickcolor: '#000'
+            };
+        }
+
+        const config = {responsive: true};
+
+        Plotly.newPlot('transformer', data, layout, config).then(function() {
+          var myPlot = document.getElementById('transformer');
+          myPlot.on('plotly_click', function(data){
+            // Jump to the step that was clicked
+              past_steps.push(step);
+              video_player.currentTime = Number(data.points[0].xaxis.ticktext[data.points[0].x]);
+              pause();
+              update();
+              return_button.innerHTML = "Return to step " + past_steps[past_steps.length - 1]; 
+          });
+      });
+    }
+
+      /** 
+      * Sets a stacked bar plot for the multi discrete action distribution
+      * @param {array} y_values - The action distribution
+      * @param {array} action - The action
+      * @param {array} action_names - The names of the actions
+      */
+      function set_stacked_bar_action_plot(y_values, action, action_names) {
+        var bar_plot_data_action = [];
+        // Set data for each action
+        for(var j = 0; j < action_names[0].length; j++) {
+            var color = ""
+            for(var i = 0; i < action_names.length; i++) {
+                if(action[i] == j) // If action sampled in the current frame
+                    color = '#FF0000'; // Color it red
+                else
+                    color = '#FAEBD7'; // Color it white
+                var trace = {
+                    x: [["action_space_", String(i)].join("")],
+                    y: [y_values[i][j]],
+                    text: [y_values[i][j], action_names[i][j]].map(String).join("<br>"), // Add action name and prob to the bar
+                    marker: {
+                        color: color,
+                        line: {
+                            color: '#000000',
+                            width: 1
+                          }
+                    },
+                    type: 'bar'
+                };
+                bar_plot_data_action.push(trace);
+            }
+        }
+
+        // Set layout for the plot
+        var bar_plot_layout_action = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 28,
+                r: 0,
+                b: 30,
+                t: 22,
+                pad: 4
+              },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: 'Action Distribution',
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            },
+            barmode: 'stack',
+            showlegend: false
+      };
+
+      // Plot the data
+      Plotly.newPlot('action_distr', bar_plot_data_action, bar_plot_layout_action);
+      }
+
+      /**
+      * Sets a bar plot for the discrete action distribution
+      */
+      function set_bar_action_plot(y_values, action, action_names) {
+
+          var color_value = new Array(y_values.length).fill('#FAEBD7'); // Set color for all actions to white
+          color_value[action] = '#FF0000'; // Except the selected action should be red
+          // Set data for the plot
+          var bar_plot_data_action = [
+              {
+                  x: action_names,
+                  y: y_values,
+                  type: 'bar',
+                  marker: {
+                      color: color_value
+                  },
+                  textposition: 'auto',
+                  text: y_values.map(String), // Add prob to the bar plot
+                  textfont: {
+                      family: 'Montserrat',
+                      size: 12,
+                  },
+                  textangle: 0,
+                  textposition: 'bottom center',
+              }
+          ];
+
+          // Set layout for the plot
+          var bar_plot_layout_action = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 28,
+                r: 0,
+                b: 30,
+                t: 22,
+                pad: 4
+              },
+            yaxis: {
+              automargin: true,
+            },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: 'Action Distribution',
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            }
+      };
+          
+          // Plot the action distribution
+          Plotly.newPlot('action_distr', bar_plot_data_action, bar_plot_layout_action);
+      }
+
+
+      /**
+      * Sets a scatter plot for the emtropy function if multi discrete actions are used
+      * @param {string} id - The id of the plot
+      * @param {string} title - The title of the plot
+      * @param {array} y_values - The entropy function y values
+      * @param {int} step - The step of the video
+      * @param {boolean} marker - If the marker should be shown
+      */
+      function set_scatter_lines_plot(id, title, y_values, step, marker) {
+        line_scatter_plot_data_value = [];
+
+        // Set colors and data for the plot
+        var colors = ['#FAEBD780', '#7CFC0080', '#FFBF0080', '#FF7F5080', '#DE316380', '#9FE2BF80', '#40E0D080', '#6495ED80', '#CCCCFF80']
+        for(var i = 0; i < y_values.length; i++) {
+          var x_values_marker = x_values.slice(0, step + 1);
+          var y_values_marker = y_values[i].slice(0, step + 1);
+            var trace = [
+            {
+                x: x_values_marker,
+                y: y_values_marker,
+                mode: 'line',
+                line: {
+                    color: colors[i]
+                },
+                name: 'action_space_' + String(i),
+                showlegend: true,
+            },
+            {
+                x: x_values,
+                y: y_values[i],
+                mode: 'markers',
+                name: 'action_space_' + String(i) + "_marker",
+                marker: {
+                    color: colors[i]
+                },
+                showlegend: true,
+            }
+        ];
+            // Add data to the plot
+            line_scatter_plot_data_value.push(trace[0]);
+            if(marker)
+              line_scatter_plot_data_value.push(trace[1]); 
+        }
+
+        // Select the selected action_space for the entropy plot
+        if(entr_selected_action_space != null && marker)
+          line_scatter_plot_data_value = [line_scatter_plot_data_value[entr_selected_action_space * 2], line_scatter_plot_data_value[entr_selected_action_space * 2 + 1]];
+        else if(entr_selected_action_space != null && !marker)
+          line_scatter_plot_data_value = [line_scatter_plot_data_value[entr_selected_action_space]];
+
+        // Set layout for the plot
+        var line__scatter_plot_layout_value = {
+            autosize: true,
+            width: 600,
+            height: 360,
+            margin: {
+                l: 50,
+                r: 0,
+                b: 30,
+                t: 25,
+                pad: 4
+                },
+            yaxis: {
+                automargin: true
+            },
+            plot_bgcolor: '#000',
+            paper_bgcolor: '#000',
+            font: {
+                family: 'Montserrat',
+                size: 12,
+                color: '#fff'
+            },
+            title: {
+                text: title,
+                font: {
+                    family: 'Montserrat',
+                    size: 15,
+                    color: '#fff'
+                }
+            },
+            showlegend: true,
+        };
+
+        // Plot the data
+        Plotly.newPlot(id, line_scatter_plot_data_value, line__scatter_plot_layout_value);
+      }
+
+
+      /**
+      * Sets a scatter plot for the value function
+      * @param {string} id - The id of the plot
+      * @param {string} title - The title of the plot
+      * @param {array} y_values - The value function y values
+      * @param {int} step - The step of the video
+      * @param {boolean} marker - If the marker should be shown
+      */
+      function set_scatter_line_plot(id, title, y_values, step, marker) {
+          // Set data for layout for the plot
+          var line__scatter_plot_layout_value = {
+              autosize: true,
+              width: 600,
+              height: 360,
+              margin: {
+                  l: 50,
+                  r: 0,
+                  b: 30,
+                  t: 25,
+                  pad: 4
+                  },
+              yaxis: {
+                  automargin: true
+              },
+              plot_bgcolor: '#000',
+              paper_bgcolor: '#000',
+              font: {
+                  family: 'Montserrat',
+                  size: 12,
+                  color: '#fff'
+              },
+              title: {
+                  text: title,
+                  font: {
+                      family: 'Montserrat',
+                      size: 15,
+                      color: '#fff'
+                  }
+              },
+              showlegend: false,
+          };
+
+          // Set data for the plot
+          var x_values_marker = x_values.slice(0, step + 1);
+          var y_values_marker = y_values.slice(0, step + 1);
+
+          var line_scatter_plot_data_value = [
+              {
+                  x: x_values_marker,
+                  y: y_values_marker,
+                  mode: 'line',
+                  line: {
+                      color: '#FAEBD7'
+                  },
+                  name: 'function',
+              },
+              {
+                  x: x_values,
+                  y: y_values,
+                  mode: 'markers',
+                  marker: {
+                      color: '#7CFC0080'
+                  },
+                  name: 'marker',
+              }
+          ];
+
+          if(!marker)
+            line_scatter_plot_data_value = [line_scatter_plot_data_value[0]];
+
+          // Plot the value function
+          Plotly.newPlot(id, line_scatter_plot_data_value, line__scatter_plot_layout_value);
+      }
+    
+    /**
+    * Opens the specific tab based on the probided id
+    * @param {string} id - The id of the tab
+    */
+    function openTab(evt, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        mediatabcontent = document.getElementsByClassName("mediatabcontent");
+        // Hide all elements with class="tabcontent" and "mediacontent" by default
+        for (i = 0; i < mediatabcontent.length; i++) {
+            mediatabcontent[i].style.display = "none";
+        }
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        // Show the specific tab content
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(id).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+    </script>
+  </body>
+</html>
