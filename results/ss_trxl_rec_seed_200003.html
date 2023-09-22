@@ -109,7 +109,7 @@
       }
       
       .dropdown {
-        position: relative;
+        position: absolute;
         display: inline-block;
       }
       
@@ -166,7 +166,7 @@
 
     <div id="Model" class="tabcontent">
       <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-      <b>load_model</b>: False<br><b>model_path</b>: <br><b>checkpoint_interval</b>: 500<br><b>activation</b>: relu<br><b>vis_encoder</b>: cnn<br><b>vec_encoder</b>: linear<br><b>num_vec_encoder_units</b>: 128<br><b>hidden_layer</b>: default<br><b>num_hidden_layers</b>: 1<br><b>num_hidden_units</b>: 384<br><b>transformer</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_blocks</b>: 3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>embed_dim</b>: 384<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_heads</b>: 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>memory_length</b>: 256<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>positional_encoding</b>: relative<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>layer_norm</b>: pre<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>init_weights</b>: xavier<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl_bias</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl_swap</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>share_heads</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_episode_steps</b>: 257<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>add_positional_encoding_to_query</b>: False<br><b>obs_decoder</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>attach_to</b>: memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>detach_gradient</b>: False<br>
+      <b>load_model</b>: False<br><b>model_path</b>: <br><b>checkpoint_interval</b>: 500<br><b>activation</b>: relu<br><b>vis_encoder</b>: cnn<br><b>vec_encoder</b>: linear<br><b>num_vec_encoder_units</b>: 128<br><b>hidden_layer</b>: default<br><b>num_hidden_layers</b>: 1<br><b>num_hidden_units</b>: 384<br><b>transformer</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_blocks</b>: 3<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>embed_dim</b>: 384<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>num_heads</b>: 4<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>memory_length</b>: 256<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>positional_encoding</b>: absolute<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>layer_norm</b>: pre<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>init_weights</b>: xavier<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl_bias</b>: 0.0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>gtrxl_swap</b>: False<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>share_heads</b>: True<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>max_episode_steps</b>: 257<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>add_positional_encoding_to_query</b>: False<br><b>obs_decoder</b>: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>attach_to</b>: memory<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>detach_gradient</b>: False<br>
     </div>
 
     <div id="Sampler" class="tabcontent">
