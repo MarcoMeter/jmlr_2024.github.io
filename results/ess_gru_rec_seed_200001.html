@@ -227,7 +227,7 @@
           <button id="reset_button" onclick="reset()">Reset</button>
           <button id="back_button" onclick="back()">Back</button>
           <button id="next_button" onclick="next()">Next</button>
-          <button id="stats_button" onclick="statistic()">Transformer</button>
+          <button id="stats_button" onclick="statistic()">Attention Scores</button>
         </buttonrow>
         <br>
         <!-- Set slider to control the figures -->
@@ -235,7 +235,7 @@
 
         <!-- Set transformer plot -->
         <div id="score-container">
-          <label for="top_n_scores">Top Scores:</label>
+          <label for="top_n_scores">Number of Top Attention Scores:</label>
           <input type="text" id="top_n_scores" size="3" value="-1" onkeydown="top_scores()">
         </div>
         <div id="transformer"></div>
@@ -628,7 +628,7 @@
           statistic_type = "general";
           stats_button.innerHTML = "Transformer";
         }
-        else if (stats_button.innerHTML == "Transformer") {
+        else if (stats_button.innerHTML == "Attention Scores") {
           statistic_type = "transformer";
           stats_button.innerHTML = "General";
         }
