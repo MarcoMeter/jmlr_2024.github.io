@@ -180,8 +180,9 @@
     </div>
 
     <div id="Media" class="mediatabcontent">
-      <br>
       <center>
+        <h1> Mortar Mayhem <br> + Gated Recurrent Unit</h1>
+        <br>
         <div id="figures" style="display: flex; flex-direction: column;">
           <div style="display: flex; flex-direction: row;">
             <div style="display: flex; flex-direction: column;">
@@ -731,8 +732,32 @@
         document.getElementById('options').style.display = 'none';
         // Updates the plots
         var top_n = Number(top_n_scores.value);
-        if (top_n == -1) top_n = step;
+        if (top_n == -1) top_n = step + 1;
         visualizeAttentionScores(y_attention_weights[step], top_n);
+          // Set action plot if statistic_plot_id is 0
+          if(statistic_plot_id == 0){
+            // Update action plot
+            if(is_discrete) { // If action_space is discrete
+              set_bar_action_plot(y_action[step][0], action[step][0], action_names);
+            }
+            else { // If action_space is multi discrete
+                set_stacked_bar_action_plot(y_action[step], action[step], action_names);
+            }
+          }
+          // Set value plot if statistic_plot_id is 1
+          if (statistic_plot_id == 1) {
+            set_scatter_line_plot('action_distr', "Value Function", y_values_plot, step, value_marker);
+          }
+
+        // Set entropy plot if statistic_plot_id is 2
+        if (statistic_plot_id == 2) {
+            if(is_discrete) { // If action_space is discrete
+                set_scatter_line_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+            }
+            else { // If action_space is multi discrete
+                set_scatter_lines_plot('action_distr', "Entropy Function", y_entropy_plot, step, entropy_marker);
+            }
+        }
         }
 
 
@@ -800,7 +825,7 @@
             const sequenceLength = filteredHeadScores.length;
 
             layout.height = 400;
-            layout.width = window.innerWidth;
+            layout.width = window.innerWidth - 50;
 
             const headScoresPlot = {
                 z: [filteredHeadScores],
